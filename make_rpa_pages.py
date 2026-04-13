@@ -270,7 +270,7 @@ def page_overview(c, page_num):
 
     # 두 칼럼
     col_y = stat_y - 20
-    col_h = 290
+    col_h = 310
     col1_x, col2_x = 40, W/2 + 5
     col_w = W/2 - 50
 
@@ -436,7 +436,7 @@ def page_role_detail(c, page_num):
 
     # 세 칼럼 카드
     card_y = flow_y - flow_h - 20
-    card_h = 340
+    card_h = 360
     card_w = (W - 80 - 20) / 3
     col_data = [
         {
@@ -782,24 +782,20 @@ def page_main_cover(c):
     c.setFillColor(TEXT_SEC)
     c.drawCentredString(W/2, H*0.67, '여섯 개의 프로젝트를 통한 성장 기록')
 
-    # 6개 프로젝트 박스 (2x3 그리드)
+    # 4개 프로젝트 박스 (2x2 그리드)
     projects = [
-        ('PROJECT 01', 'AuRa', '향수 이커머스', '4인 팀 · 3주',
+        ('PROJECT 01', 'AuRa', 'FIRST 팀 쇼핑몰 · React + Node.js', '4인 팀 · 3주',
          HexColor('#6266f1'), HexColor('#1a1f4e')),
-        ('PROJECT 02', 'KISETSU', '도매 패션 이커머스', '1인 솔로 · 2주',
+        ('PROJECT 02', 'KISETSU', '계절 솔로 · React + Socket.io', '1인 솔로 · 10일',
          HexColor('#0fb981'), HexColor('#0d2b22')),
         ('PROJECT 03', '재무제표 자동화', 'Python + BrityRPA', '3인 팀 · 2주',
          HexColor('#f59d0a'), HexColor('#2b1e0a')),
         ('PROJECT 04', '개발환기좀해 ERP', 'Spring Boot + JSP', '1인 솔로 · 5주',
          HexColor('#e05c8a'), HexColor('#2b0d18')),
-        ('PROJECT 05', 'FIRST 팀 쇼핑몰', 'React + Node.js', '4인 팀 · 3주',
-         HexColor('#38bdf8'), HexColor('#0a1f2e')),
-        ('PROJECT 06', '계절 솔로 쇼핑몰', 'React + Socket.io', '1인 솔로 · 10일',
-         HexColor('#fb923c'), HexColor('#2b1508')),
     ]
-    box_w = 118
-    box_h = 58
-    gap = 10
+    box_w = 130
+    box_h = 68
+    gap = 14
     total_w = 2 * box_w + gap
     bx_start = W/2 - total_w/2
     row1_top = H * 0.615
@@ -831,7 +827,7 @@ def page_main_cover(c):
                 'Socket.io', 'MyBatis', 'Python', 'BrityRPA', 'Nodemailer']
     tag_total = sum(c.stringWidth(t, 'MG', 7) + 16 for t in all_tags) + (len(all_tags)-1)*4
     tx = W/2 - tag_total/2
-    bottom_box_y = row1_top - 2 * (box_h + gap) - box_h
+    bottom_box_y = row1_top - 1 * (box_h + gap) - box_h
     ty = bottom_box_y - 22
     for t in all_tags:
         c.setFont('MG', 7)
@@ -890,37 +886,32 @@ def page_toc(c):
         c.drawRightString(W - 50, y - 12, f'{pg:02d}')
 
     y = H - 100
-    sec_hdr('PROJECT 01 — AuRa 향수 쇼핑몰', y);  y -= 14
+    sec_hdr('PROJECT 01 — AuRa / FIRST 팀 쇼핑몰', y);  y -= 14
     item(1, '프로젝트 개요', 'AuRa 소개, 기술 스택, 팀 구성', 3, y);  y -= 30
     item(2, '주요 기여 — DB · 인증 · 장바구니 · 카테고리', '담당 기능 상세, 코드 구현 방식', 4, y);  y -= 30
     item(3, '기술적 어필 포인트', '관심사 분리, 중복 방지 로직, 서버단 검증', 5, y);  y -= 38
 
+    item(4, '고난과 역경 — Git이 증명하는 개발 여정', '"결제된다 무야호" · 머지 충돌 · IP 전쟁', 7, y, FIRST_ACCENT);  y -= 30
+    item(5, '해결 & 회고', '결제 구현 돌파, 협업 충돌 극복, 성장 스토리', 9, y, FIRST_ACCENT);  y -= 38
+
     sec_hdr('PROJECT 02 — KISETSU 도매 패션 이커머스', y, ACCENT_G);  y -= 14
-    item(4, '프로젝트 개요 · 아키텍처', '기획 배경, 시스템 구조, 기술 스택', 7, y, ACCENT_G);  y -= 30
-    item(5, '주요 기능 구현', 'JWT 인증, 실시간 채팅, Context API, 인기검색어', 9, y, ACCENT_G);  y -= 30
-    item(6, '결과 · 회고', '구현 성과, 배운 점, 성장 스토리', 10, y, ACCENT_G);  y -= 38
+    item(6, '프로젝트 개요 · 아키텍처', '기획 배경, 시스템 구조, 기술 스택', 10, y, ACCENT_G);  y -= 30
+    item(7, '주요 기능 구현', 'JWT 인증, 실시간 채팅, Context API, 인기검색어', 12, y, ACCENT_G);  y -= 30
+    item(8, '결과 · 회고', '구현 성과, 배운 점, 성장 스토리', 13, y, ACCENT_G);  y -= 30
+    item(9, '고난과 역경 — 10일간의 기록', '환경 불일치 · IP 전쟁 · 채팅 스크롤 사투', 14, y, ACCENT_G);  y -= 30
+    item(10, '결과 & 회고 (솔로)', '10일 완성, 전체 기능 솔로 구현, 성장 포인트', 16, y, ACCENT_G);  y -= 38
 
     sec_hdr('PROJECT 03 — 재무제표 자동화 (Python + BrityRPA)', y, ACCENT_O);  y -= 14
-    item(7, '프로젝트 개요', '기획 배경, 시스템 아키텍처, 담당 역할', 12, y, ACCENT_O);  y -= 30
-    item(8, '담당 역할 — RPA 자동화 파이프라인', '아키텍처 설계, RPA 구현, 데이터 검증', 13, y, ACCENT_O);  y -= 30
-    item(9, '핵심 기능 구현', 'Python 실행, Excel 차트 자동화, 메일 발송', 14, y, ACCENT_O);  y -= 30
-    item(10, '결과 · 회고', 'RPA 성과, 잘된 점, 아쉬운 점, 자체 평가', 15, y, ACCENT_O);  y -= 38
+    item(11, '프로젝트 개요', '기획 배경, 시스템 아키텍처, 담당 역할', 18, y, ACCENT_O);  y -= 30
+    item(12, '담당 역할 — RPA 자동화 파이프라인', '아키텍처 설계, RPA 구현, 데이터 검증', 19, y, ACCENT_O);  y -= 30
+    item(13, '핵심 기능 구현', 'Python 실행, Excel 차트 자동화, 메일 발송', 20, y, ACCENT_O);  y -= 30
+    item(14, '결과 · 회고', 'RPA 성과, 잘된 점, 아쉬운 점, 자체 평가', 21, y, ACCENT_O);  y -= 38
 
     sec_hdr('PROJECT 04 — 개발환기좀해 ERP (Spring Boot + MyBatis)', y, ERP_ACCENT);  y -= 14
-    item(11, '프로젝트 개요 · 아키텍처', '기획 배경, 전체 모듈, 기술 스택', 17, y, ERP_ACCENT);  y -= 30
-    item(12, '핵심 기능 구현', 'OCR 거래명세서, BOM 자동발주, 재무 리포트', 18, y, ERP_ACCENT);  y -= 30
-    item(13, '성능 최적화 · DB 쿼리 튜닝', 'N+1 문제 해결, 인덱스 최적화 (14.25s→0.17s)', 19, y, ERP_ACCENT);  y -= 30
-    item(14, '기술적 어필 & 회고', 'Spring Security, 트랜잭션, 성과, 회고', 20, y, ERP_ACCENT);  y -= 38
-
-    sec_hdr('PROJECT 05 — FIRST 팀 쇼핑몰 (React + Node.js)', y, FIRST_ACCENT);  y -= 14
-    item(15, '프로젝트 개요 · 기술스택', '팀 구성, React + Express + MariaDB, 담당 파트', 21, y, FIRST_ACCENT);  y -= 30
-    item(16, '고난과 역경 — Git이 증명하는 개발 여정', '"결제된다 무야호" · 머지 충돌 · IP 전쟁', 22, y, FIRST_ACCENT);  y -= 30
-    item(17, '해결 & 회고', '결제 구현 돌파, 협업 충돌 극복, 성장 스토리', 23, y, FIRST_ACCENT);  y -= 38
-
-    sec_hdr('PROJECT 06 — 계절 솔로 쇼핑몰 (React + Node.js + Socket.io)', y, SOLO_ACCENT);  y -= 14
-    item(18, '프로젝트 개요 · 10일 여정', '솔로 풀스택, JWT · Socket.io · Chart.js · Nodemailer', 24, y, SOLO_ACCENT);  y -= 30
-    item(19, '고난과 역경 — 10일간의 기록', '환경 불일치 · IP 전쟁 · 채팅 스크롤 사투', 25, y, SOLO_ACCENT);  y -= 30
-    item(20, '결과 & 회고', '10일 완성, 전체 기능 솔로 구현, 성장 포인트', 26, y, SOLO_ACCENT)
+    item(15, '프로젝트 개요 · 아키텍처', '기획 배경, 전체 모듈, 기술 스택', 23, y, ERP_ACCENT);  y -= 30
+    item(16, '핵심 기능 구현', 'OCR 거래명세서, BOM 자동발주, 재무 리포트', 24, y, ERP_ACCENT);  y -= 30
+    item(17, '성능 최적화 · DB 쿼리 튜닝', 'N+1 문제 해결, 인덱스 최적화 (14.25s→0.17s)', 25, y, ERP_ACCENT);  y -= 30
+    item(18, '기술적 어필 & 회고', 'Spring Security, 트랜잭션, 성과, 회고', 26, y, ERP_ACCENT)
 
     draw_footer(c, 'Developer Portfolio', '', 2)
     c.showPage()
@@ -1420,7 +1411,7 @@ def page_first_cover_overview(c, page_num):
     # PROJECT 05 레이블
     c.setFont('MGBold', 9)
     c.setFillColor(FIRST_ACCENT)
-    lbl = 'PROJECT 05'
+    lbl = 'PROJECT 01'
     lw_ = c.stringWidth(lbl, 'MGBold', 9)
     c.setStrokeColor(FIRST_ACCENT)
     c.setLineWidth(0.5)
@@ -1430,7 +1421,7 @@ def page_first_cover_overview(c, page_num):
 
     c.setFont('MGBold', 36)
     c.setFillColor(TEXT_PRI)
-    c.drawCentredString(W/2, H*0.69, 'FIRST 팀 쇼핑몰')
+    c.drawCentredString(W/2, H*0.69, 'AuRa')
 
     c.setFont('MG', 12)
     c.setFillColor(TEXT_SEC)
@@ -1492,7 +1483,7 @@ def page_first_cover_overview(c, page_num):
         if len(desc_) > 50:
             c.drawString(fx_ + 16, fy_ + fh - 36, desc_[50:])
 
-    draw_footer(c, 'Developer Portfolio', 'FIRST 팀 쇼핑몰 — Project 05', page_num)
+    draw_footer(c, 'Developer Portfolio', 'AuRa — Project 01', page_num)
     c.showPage()
 
 
@@ -1568,7 +1559,7 @@ def page_first_struggle(c, page_num):
 
         start_y = cy_ - item_gap
 
-    draw_footer(c, 'Developer Portfolio', 'FIRST 팀 쇼핑몰 — Project 05', page_num)
+    draw_footer(c, 'Developer Portfolio', 'AuRa — Project 01', page_num)
     c.showPage()
 
 
@@ -1582,7 +1573,7 @@ def page_first_review(c, page_num):
     c.drawString(40, H - 100, '해결 & 회고')
     c.setFont('MG', 10)
     c.setFillColor(TEXT_SEC)
-    c.drawString(40, H - 116, 'FIRST 팀 쇼핑몰 — 협업 충돌 극복 & 성장 스토리')
+    c.drawString(40, H - 116, 'AuRa — 협업 충돌 극복 & 성장 스토리')
 
     # 성과 수치
     metrics = [('결제', '완전 구현'), ('팀원', '4명 협업'), ('머지', '충돌 극복'), ('OpenAI', 'API 연동')]
@@ -1600,7 +1591,7 @@ def page_first_review(c, page_num):
 
     # 어떻게 해결했나 + 아쉬운 점
     tw_ = (W - 80 - 16) / 2
-    th_ = 200
+    th_ = 220
 
     card_rect(c, 40, m_y - th_ - 20, tw_, th_)
     left_accent_line(c, 48, m_y - th_ - 10, th_ - 20, color=FIRST_ACCENT)
@@ -1642,7 +1633,7 @@ def page_first_review(c, page_num):
     left_accent_line(c, 48, ry_ - rh_ + 10, rh_ - 20, color=FIRST_ACCENT)
     c.setFont('MGBold', 11)
     c.setFillColor(FIRST_ACCENT)
-    c.drawString(58, ry_ - 20, '💬 회고 — FIRST 팀 프로젝트')
+    c.drawString(58, ry_ - 20, '💬 회고 — AuRa 팀 프로젝트')
     c.setStrokeColor(BORDER)
     c.setLineWidth(0.5)
     c.line(58, ry_ - 28, W - 50, ry_ - 28)
@@ -1659,7 +1650,7 @@ def page_first_review(c, page_num):
         c.drawString(58, sy_, line_)
         sy_ -= 14
 
-    draw_footer(c, 'Developer Portfolio', 'FIRST 팀 쇼핑몰 — Project 05', page_num)
+    draw_footer(c, 'Developer Portfolio', 'AuRa — Project 01', page_num)
     c.showPage()
 
 
@@ -1674,7 +1665,7 @@ def page_solo_cover_overview(c, page_num):
 
     c.setFont('MGBold', 9)
     c.setFillColor(SOLO_ACCENT)
-    lbl = 'PROJECT 06'
+    lbl = 'PROJECT 02'
     lw_ = c.stringWidth(lbl, 'MGBold', 9)
     c.setStrokeColor(SOLO_ACCENT)
     c.setLineWidth(0.5)
@@ -1684,7 +1675,7 @@ def page_solo_cover_overview(c, page_num):
 
     c.setFont('MGBold', 42)
     c.setFillColor(TEXT_PRI)
-    c.drawCentredString(W/2, H*0.69, '계절')
+    c.drawCentredString(W/2, H*0.69, 'KISETSU')
 
     c.setFont('MG', 13)
     c.setFillColor(TEXT_SEC)
@@ -1745,7 +1736,7 @@ def page_solo_cover_overview(c, page_num):
         if len(desc_) > 50:
             c.drawString(fx_ + 16, fy_ + fh - 36, desc_[50:])
 
-    draw_footer(c, 'Developer Portfolio', '계절 솔로 쇼핑몰 — Project 06', page_num)
+    draw_footer(c, 'Developer Portfolio', 'KISETSU — Project 02', page_num)
     c.showPage()
 
 
@@ -1850,7 +1841,7 @@ def page_solo_struggle(c, page_num):
 
         start_y = cy_ - item_gap
 
-    draw_footer(c, 'Developer Portfolio', '계절 솔로 쇼핑몰 — Project 06', page_num)
+    draw_footer(c, 'Developer Portfolio', 'KISETSU — Project 02', page_num)
     c.showPage()
 
 
@@ -1864,7 +1855,7 @@ def page_solo_review(c, page_num):
     c.drawString(40, H - 100, '결과 & 회고')
     c.setFont('MG', 10)
     c.setFillColor(TEXT_SEC)
-    c.drawString(40, H - 116, '계절 — 10일 만에 완성한 풀스택 쇼핑몰')
+    c.drawString(40, H - 116, 'KISETSU — 10일 만에 완성한 풀스택 쇼핑몰')
 
     # 수치
     metrics = [('10일', '완성'), ('21개', '커밋'), ('Socket.io', '실시간 채팅'), ('100%', '솔로 구현')]
@@ -1881,7 +1872,7 @@ def page_solo_review(c, page_num):
         c.drawCentredString(mx_ + (m_w-4)/2, m_y + 14, lbl_)
 
     tw_ = (W - 80 - 16) / 2
-    th_ = 200
+    th_ = 220
 
     # 잘된 점
     card_rect(c, 40, m_y - th_ - 20, tw_, th_)
@@ -1927,7 +1918,7 @@ def page_solo_review(c, page_num):
     left_accent_line(c, 48, ry_ - rh_ + 10, rh_ - 20, color=SOLO_ACCENT)
     c.setFont('MGBold', 11)
     c.setFillColor(SOLO_ACCENT)
-    c.drawString(58, ry_ - 20, '💬 회고 — 계절 솔로 프로젝트')
+    c.drawString(58, ry_ - 20, '💬 회고 — KISETSU 솔로 프로젝트')
     c.setStrokeColor(BORDER)
     c.setLineWidth(0.5)
     c.line(58, ry_ - 28, W - 50, ry_ - 28)
@@ -1944,7 +1935,7 @@ def page_solo_review(c, page_num):
         c.drawString(58, sy_, line_)
         sy_ -= 14
 
-    draw_footer(c, 'Developer Portfolio', '계절 솔로 쇼핑몰 — Project 06', page_num)
+    draw_footer(c, 'Developer Portfolio', 'KISETSU — Project 02', page_num)
     c.showPage()
 
 
@@ -1952,7 +1943,7 @@ def page_solo_review(c, page_num):
 # 메인 실행
 # ══════════════════════════════════════════════════════════════
 def build_full_portfolio(out_path):
-    """커버 + 목차 + 기존 p3~10 + RPA 5p + ERP 5p + FIRST 3p + Solo 3p = 26페이지"""
+    """커버 + 목차 + 기존 p3~10 + FIRST 3p + Solo 3p + RPA 5p + ERP 5p = 26페이지"""
     import fitz as _fitz, os
 
     tmp_front = out_path.replace('.pdf', '_front_tmp.pdf')
@@ -1967,35 +1958,37 @@ def build_full_portfolio(out_path):
     page_toc(c1)
     c1.save()
 
-    # ② RPA 파트 (p11~15)
-    c2 = canvas.Canvas(tmp_rpa, pagesize=A4)
-    page_cover(c2, 11);      page_overview(c2, 12)
-    page_role_detail(c2, 13); page_rpa_impl(c2, 14); page_result(c2, 15)
-    c2.save()
-
-    # ③ ERP 파트 (p16~20)
-    c3 = canvas.Canvas(tmp_erp, pagesize=A4)
-    page_erp_cover(c3, 16);       page_erp_overview(c3, 17)
-    page_erp_features(c3, 18);    page_erp_performance(c3, 19)
-    page_erp_review(c3, 20)
-    c3.save()
-
-    # ④ FIRST 팀 쇼핑몰 (p21~23)
+    # ② FIRST 팀 쇼핑몰 = AuRa 새 내용 (p7~9)
     c4 = canvas.Canvas(tmp_first, pagesize=A4)
-    page_first_cover_overview(c4, 21)
-    page_first_struggle(c4, 22)
-    page_first_review(c4, 23)
+    page_first_cover_overview(c4, 7)
+    page_first_struggle(c4, 8)
+    page_first_review(c4, 9)
     c4.save()
 
-    # ⑤ Solo 계절 (p24~26)
+    # ③ Solo 계절 = KISETSU 새 내용 (p14~16)
     c5 = canvas.Canvas(tmp_solo, pagesize=A4)
-    page_solo_cover_overview(c5, 24)
-    page_solo_struggle(c5, 25)
-    page_solo_review(c5, 26)
+    page_solo_cover_overview(c5, 14)
+    page_solo_struggle(c5, 15)
+    page_solo_review(c5, 16)
     c5.save()
 
+    # ④ RPA 파트 (p17~21)
+    c2 = canvas.Canvas(tmp_rpa, pagesize=A4)
+    page_cover(c2, 17);       page_overview(c2, 18)
+    page_role_detail(c2, 19); page_rpa_impl(c2, 20); page_result(c2, 21)
+    c2.save()
+
+    # ⑤ ERP 파트 (p22~26)
+    c3 = canvas.Canvas(tmp_erp, pagesize=A4)
+    page_erp_cover(c3, 22);       page_erp_overview(c3, 23)
+    page_erp_features(c3, 24);    page_erp_performance(c3, 25)
+    page_erp_review(c3, 26)
+    c3.save()
+
     # ⑥ 합치기
-    orig  = _fitz.open('C:/Users/3class_013/Desktop/포트폴리오 수정폴더/통합_포트폴리오.pdf')
+    _orig_path = 'C:/Users/3class_013/Desktop/포트폴리오 수정폴더/통합_포트폴리오.pdf'
+    orig_aura   = _fitz.open(_orig_path)   # AuRa 삽입용
+    orig_kisetsu = _fitz.open(_orig_path)  # KISETSU 삽입용 (리소스 분리)
     front = _fitz.open(tmp_front)
     rpa   = _fitz.open(tmp_rpa)
     erp   = _fitz.open(tmp_erp)
@@ -2003,16 +1996,17 @@ def build_full_portfolio(out_path):
     solo  = _fitz.open(tmp_solo)
 
     out = _fitz.open()
-    out.insert_pdf(front)                        # p1~2
-    out.insert_pdf(orig, from_page=2, to_page=9) # p3~10
-    out.insert_pdf(rpa)                          # p11~15
-    out.insert_pdf(erp)                          # p16~20
-    out.insert_pdf(first)                        # p21~23
-    out.insert_pdf(solo)                         # p24~26
+    out.insert_pdf(front)                                   # p1~2
+    out.insert_pdf(orig_aura,   from_page=2, to_page=5)    # AuRa 원본 p3~6
+    out.insert_pdf(first)                                   # AuRa 새 내용 p7~9
+    out.insert_pdf(orig_kisetsu, from_page=6, to_page=9)   # KISETSU 원본 p10~13
+    out.insert_pdf(solo)                                    # KISETSU 새 내용 p14~16
+    out.insert_pdf(rpa)                                     # p17~21
+    out.insert_pdf(erp)                                     # p22~26
     page_count = len(out)
-    out.save(out_path)
+    out.save(out_path, garbage=4, deflate=True)
 
-    for f in [front, rpa, erp, first, solo, orig, out]: f.close()
+    for f in [front, rpa, erp, first, solo, orig_aura, orig_kisetsu, out]: f.close()
     for t in [tmp_front, tmp_rpa, tmp_erp, tmp_first, tmp_solo]: os.remove(t)
 
     print(f'Done: {page_count} pages -> {out_path}')
