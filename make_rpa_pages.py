@@ -780,9 +780,9 @@ def page_main_cover(c):
     # 서브타이틀
     c.setFont('MG', 12)
     c.setFillColor(TEXT_SEC)
-    c.drawCentredString(W/2, H*0.67, '네 개의 프로젝트를 통한 성장 기록')
+    c.drawCentredString(W/2, H*0.67, '여섯 개의 프로젝트를 통한 성장 기록')
 
-    # 4개 프로젝트 박스 (2x2 그리드)
+    # 6개 프로젝트 박스 (2x3 그리드)
     projects = [
         ('PROJECT 01', 'AuRa', '향수 이커머스', '4인 팀 · 3주',
          HexColor('#6266f1'), HexColor('#1a1f4e')),
@@ -792,43 +792,47 @@ def page_main_cover(c):
          HexColor('#f59d0a'), HexColor('#2b1e0a')),
         ('PROJECT 04', '개발환기좀해 ERP', 'Spring Boot + JSP', '1인 솔로 · 5주',
          HexColor('#e05c8a'), HexColor('#2b0d18')),
+        ('PROJECT 05', 'FIRST 팀 쇼핑몰', 'React + Node.js', '4인 팀 · 3주',
+         HexColor('#38bdf8'), HexColor('#0a1f2e')),
+        ('PROJECT 06', '계절 솔로 쇼핑몰', 'React + Socket.io', '1인 솔로 · 10일',
+         HexColor('#fb923c'), HexColor('#2b1508')),
     ]
     box_w = 118
-    box_h = 72
+    box_h = 58
     gap = 10
     total_w = 2 * box_w + gap
     bx_start = W/2 - total_w/2
-    row1_y = H * 0.59
-    row2_y = row1_y - box_h - gap
+    row1_top = H * 0.615
 
     for i, (proj_lbl, title, sub, meta, accent, bg_col) in enumerate(projects):
         col = i % 2
         row = i // 2
         bx = bx_start + col * (box_w + gap)
-        by = row1_y - row * (box_h + gap)
+        by = row1_top - row * (box_h + gap) - box_h
         c.setFillColor(bg_col)
         c.setStrokeColor(accent)
         c.setLineWidth(0.8)
         c.roundRect(bx, by, box_w, box_h, 5, fill=1, stroke=1)
         c.setFont('MGBold', 7)
         c.setFillColor(accent)
-        c.drawString(bx + 9, by + box_h - 14, proj_lbl)
-        c.setFont('MGBold', 11.5)
+        c.drawString(bx + 9, by + box_h - 13, proj_lbl)
+        c.setFont('MGBold', 10.5)
         c.setFillColor(TEXT_PRI)
-        c.drawString(bx + 9, by + box_h - 28, title)
-        c.setFont('MG', 8)
-        c.setFillColor(TEXT_SEC)
-        c.drawString(bx + 9, by + box_h - 42, sub)
+        c.drawString(bx + 9, by + box_h - 25, title)
         c.setFont('MG', 7.5)
+        c.setFillColor(TEXT_SEC)
+        c.drawString(bx + 9, by + box_h - 37, sub)
+        c.setFont('MG', 7)
         c.setFillColor(TEXT_DARK)
-        c.drawString(bx + 9, by + 10, meta)
+        c.drawString(bx + 9, by + 9, meta)
 
     # 기술 스택 태그
     all_tags = ['React', 'Node.js', 'Spring Boot', 'MariaDB', 'JWT',
-                'MyBatis', 'JSP', 'Python', 'BrityRPA', 'Spring Security']
+                'Socket.io', 'MyBatis', 'Python', 'BrityRPA', 'Nodemailer']
     tag_total = sum(c.stringWidth(t, 'MG', 7) + 16 for t in all_tags) + (len(all_tags)-1)*4
     tx = W/2 - tag_total/2
-    ty = row2_y - 28
+    bottom_box_y = row1_top - 2 * (box_h + gap) - box_h
+    ty = bottom_box_y - 22
     for t in all_tags:
         c.setFont('MG', 7)
         tw2 = c.stringWidth(t, 'MG', 7) + 16
@@ -843,7 +847,7 @@ def page_main_cover(c):
     # 연도
     c.setFont('MG', 9)
     c.setFillColor(TEXT_DARK)
-    c.drawCentredString(W/2, ty - 18, '2025 — 2026')
+    c.drawCentredString(W/2, ty - 16, '2025 — 2026')
 
     c.showPage()
 
@@ -851,7 +855,9 @@ def page_main_cover(c):
 # ══════════════════════════════════════════════════════════════
 # 업데이트 목차 — PROJECT 03, 04 포함
 # ══════════════════════════════════════════════════════════════
-ERP_ACCENT = HexColor('#e05c8a')
+ERP_ACCENT   = HexColor('#e05c8a')
+FIRST_ACCENT = HexColor('#38bdf8')   # sky-blue — FIRST 팀 프로젝트
+SOLO_ACCENT  = HexColor('#fb923c')   # orange   — Solo 계절 프로젝트
 
 def page_toc(c):
     full_bg(c)
@@ -863,47 +869,58 @@ def page_toc(c):
     c.setLineWidth(0.5)
     c.line(40, H - 76, W - 40, H - 76)
 
-    def sec_hdr(label, y):
-        c.setFillColor(ACCENT_V)
-        c.rect(40, y - 1, 3, 13, fill=1, stroke=0)
-        c.setFont('MGBold', 9)
-        c.setFillColor(ACCENT_VL)
+    def sec_hdr(label, y, col=ACCENT_VL):
+        c.setFillColor(col)
+        c.rect(40, y - 1, 3, 12, fill=1, stroke=0)
+        c.setFont('MGBold', 8.5)
+        c.setFillColor(col)
         c.drawString(50, y, label)
 
     def item(num, title, subtitle, pg, y, col=ACCENT_V):
-        card_rect(c, 40, y - 28, W - 80, 34)
-        badge(c, 50, y - 20, f'{num:02d}', color=col, font_size=8, pad_x=6, pad_h=13)
-        c.setFont('MGBold', 9.5)
+        card_rect(c, 40, y - 22, W - 80, 26)
+        badge(c, 50, y - 16, f'{num:02d}', color=col, font_size=7.5, pad_x=5, pad_h=11)
+        c.setFont('MGBold', 8.5)
         c.setFillColor(TEXT_PRI)
-        c.drawString(86, y - 10, title)
-        c.setFont('MG', 7.5)
+        c.drawString(80, y - 8, title)
+        c.setFont('MG', 7)
         c.setFillColor(TEXT_SEC)
-        c.drawString(86, y - 21, subtitle)
-        c.setFont('MG', 8.5)
+        c.drawString(80, y - 18, subtitle)
+        c.setFont('MG', 8)
         c.setFillColor(TEXT_DARK)
-        c.drawRightString(W - 50, y - 15, f'{pg:02d}')
+        c.drawRightString(W - 50, y - 12, f'{pg:02d}')
 
     y = H - 100
-    sec_hdr('PROJECT 01 — AuRa 향수 쇼핑몰', y);  y -= 18
-    item(1, '프로젝트 개요', 'AuRa 소개, 기술 스택, 팀 구성', 3, y);  y -= 42
-    item(2, '주요 기여 — DB · 인증 · 장바구니 · 카테고리', '담당 기능 상세, 코드 구현 방식', 4, y);  y -= 42
-    item(3, '기술적 어필 포인트', '관심사 분리, 중복 방지 로직, 서버단 검증', 5, y);  y -= 50
+    sec_hdr('PROJECT 01 — AuRa 향수 쇼핑몰', y);  y -= 14
+    item(1, '프로젝트 개요', 'AuRa 소개, 기술 스택, 팀 구성', 3, y);  y -= 30
+    item(2, '주요 기여 — DB · 인증 · 장바구니 · 카테고리', '담당 기능 상세, 코드 구현 방식', 4, y);  y -= 30
+    item(3, '기술적 어필 포인트', '관심사 분리, 중복 방지 로직, 서버단 검증', 5, y);  y -= 38
 
-    sec_hdr('PROJECT 02 — KISETSU 도매 패션 이커머스', y);  y -= 18
-    item(4, '프로젝트 개요 · 아키텍처', '기획 배경, 시스템 구조, 기술 스택', 7, y, ACCENT_G);  y -= 42
-    item(5, '주요 기능 구현', 'JWT 인증, 실시간 채팅, Context API, 인기검색어', 9, y, ACCENT_G);  y -= 42
-    item(6, '결과 · 회고', '구현 성과, 배운 점, 성장 스토리', 10, y, ACCENT_G);  y -= 50
+    sec_hdr('PROJECT 02 — KISETSU 도매 패션 이커머스', y, ACCENT_G);  y -= 14
+    item(4, '프로젝트 개요 · 아키텍처', '기획 배경, 시스템 구조, 기술 스택', 7, y, ACCENT_G);  y -= 30
+    item(5, '주요 기능 구현', 'JWT 인증, 실시간 채팅, Context API, 인기검색어', 9, y, ACCENT_G);  y -= 30
+    item(6, '결과 · 회고', '구현 성과, 배운 점, 성장 스토리', 10, y, ACCENT_G);  y -= 38
 
-    sec_hdr('PROJECT 03 — 재무제표 자동화 (Python + BrityRPA)', y);  y -= 18
-    item(7, '프로젝트 개요', '기획 배경, 시스템 아키텍처, 담당 역할', 12, y, ACCENT_O);  y -= 42
-    item(8, '담당 역할 — RPA 자동화 파이프라인', '아키텍처 설계, RPA 구현, 데이터 검증', 13, y, ACCENT_O);  y -= 42
-    item(9, '핵심 기능 구현', 'Python 실행, Excel 차트 자동화, 메일 발송', 14, y, ACCENT_O);  y -= 42
-    item(10, '결과 · 회고', 'RPA 성과, 잘된 점, 아쉬운 점, 자체 평가', 15, y, ACCENT_O);  y -= 50
+    sec_hdr('PROJECT 03 — 재무제표 자동화 (Python + BrityRPA)', y, ACCENT_O);  y -= 14
+    item(7, '프로젝트 개요', '기획 배경, 시스템 아키텍처, 담당 역할', 12, y, ACCENT_O);  y -= 30
+    item(8, '담당 역할 — RPA 자동화 파이프라인', '아키텍처 설계, RPA 구현, 데이터 검증', 13, y, ACCENT_O);  y -= 30
+    item(9, '핵심 기능 구현', 'Python 실행, Excel 차트 자동화, 메일 발송', 14, y, ACCENT_O);  y -= 30
+    item(10, '결과 · 회고', 'RPA 성과, 잘된 점, 아쉬운 점, 자체 평가', 15, y, ACCENT_O);  y -= 38
 
-    sec_hdr('PROJECT 04 — 개발환기좀해 ERP (Spring Boot + MyBatis)', y);  y -= 18
-    item(11, '프로젝트 개요 · 아키텍처', '기획 배경, 전체 모듈, 기술 스택', 16, y, ERP_ACCENT);  y -= 42
-    item(12, '핵심 기능 구현', 'OCR 거래명세서, BOM 자동발주, 재무 리포트', 17, y, ERP_ACCENT);  y -= 42
-    item(13, '기술적 어필 & 회고', 'Spring Security, 트랜잭션, 성과, 회고', 18, y, ERP_ACCENT)
+    sec_hdr('PROJECT 04 — 개발환기좀해 ERP (Spring Boot + MyBatis)', y, ERP_ACCENT);  y -= 14
+    item(11, '프로젝트 개요 · 아키텍처', '기획 배경, 전체 모듈, 기술 스택', 17, y, ERP_ACCENT);  y -= 30
+    item(12, '핵심 기능 구현', 'OCR 거래명세서, BOM 자동발주, 재무 리포트', 18, y, ERP_ACCENT);  y -= 30
+    item(13, '성능 최적화 · DB 쿼리 튜닝', 'N+1 문제 해결, 인덱스 최적화 (14.25s→0.17s)', 19, y, ERP_ACCENT);  y -= 30
+    item(14, '기술적 어필 & 회고', 'Spring Security, 트랜잭션, 성과, 회고', 20, y, ERP_ACCENT);  y -= 38
+
+    sec_hdr('PROJECT 05 — FIRST 팀 쇼핑몰 (React + Node.js)', y, FIRST_ACCENT);  y -= 14
+    item(15, '프로젝트 개요 · 기술스택', '팀 구성, React + Express + MariaDB, 담당 파트', 21, y, FIRST_ACCENT);  y -= 30
+    item(16, '고난과 역경 — Git이 증명하는 개발 여정', '"결제된다 무야호" · 머지 충돌 · IP 전쟁', 22, y, FIRST_ACCENT);  y -= 30
+    item(17, '해결 & 회고', '결제 구현 돌파, 협업 충돌 극복, 성장 스토리', 23, y, FIRST_ACCENT);  y -= 38
+
+    sec_hdr('PROJECT 06 — 계절 솔로 쇼핑몰 (React + Node.js + Socket.io)', y, SOLO_ACCENT);  y -= 14
+    item(18, '프로젝트 개요 · 10일 여정', '솔로 풀스택, JWT · Socket.io · Chart.js · Nodemailer', 24, y, SOLO_ACCENT);  y -= 30
+    item(19, '고난과 역경 — 10일간의 기록', '환경 불일치 · IP 전쟁 · 채팅 스크롤 사투', 25, y, SOLO_ACCENT);  y -= 30
+    item(20, '결과 & 회고', '10일 완성, 전체 기능 솔로 구현, 성장 포인트', 26, y, SOLO_ACCENT)
 
     draw_footer(c, 'Developer Portfolio', '', 2)
     c.showPage()
@@ -1149,7 +1166,7 @@ def page_erp_features(c, page_num):
 # ══════════════════════════════════════════════════════════════
 def page_erp_review(c, page_num):
     full_bg(c)
-    badge(c, 40, H - 70, '13')
+    badge(c, 40, H - 70, '14')
     c.setFont('MGBold', 22)
     c.setFillColor(TEXT_PRI)
     c.drawString(40, H - 100, '기술적 어필 & 회고')
@@ -1238,15 +1255,711 @@ def page_erp_review(c, page_num):
 
 
 # ══════════════════════════════════════════════════════════════
+# PROJECT 04 — 성능 최적화 (p19)
+# ══════════════════════════════════════════════════════════════
+def page_erp_performance(c, page_num):
+    full_bg(c)
+    badge(c, 40, H - 70, '13')
+    c.setFont('MGBold', 22)
+    c.setFillColor(TEXT_PRI)
+    c.drawString(40, H - 100, '성능 최적화 · DB 쿼리 튜닝')
+    c.setFont('MG', 10)
+    c.setFillColor(TEXT_SEC)
+    c.drawString(40, H - 116, '발주 · 입고 페이지 로딩 14.25초 → 0.17초 (83배 개선)')
+
+    # ── 임팩트 수치 배너 ────────────────────────────────────────
+    banner_y = H - 158
+    card_rect(c, 40, banner_y, W - 80, 52, fill=HexColor('#0d1f0d'), stroke=ACCENT_G, lw=1.5)
+    left_accent_line(c, 40, banner_y, 52, color=ACCENT_G, lw=4)
+
+    # BEFORE
+    c.setFont('MGBold', 9)
+    c.setFillColor(TEXT_DARK)
+    c.drawString(70, banner_y + 36, 'BEFORE')
+    c.setFont('MGBold', 26)
+    c.setFillColor(HexColor('#f87171'))
+    c.drawString(70, banner_y + 12, '14.25 s')
+
+    # 화살표
+    arr_x = W/2 - 20
+    c.setFont('MGBold', 28)
+    c.setFillColor(ACCENT_G)
+    c.drawCentredString(arr_x, banner_y + 16, '→')
+
+    c.setFont('MGBold', 9)
+    c.setFillColor(TEXT_DARK)
+    c.drawString(arr_x + 32, banner_y + 36, 'AFTER')
+    c.setFont('MGBold', 26)
+    c.setFillColor(ACCENT_G)
+    c.drawString(arr_x + 32, banner_y + 12, '0.17 s  (176 ms)')
+
+    # 배율 뱃지
+    c.setFillColor(ACCENT_G)
+    c.roundRect(W - 120, banner_y + 12, 70, 26, 4, fill=1, stroke=0)
+    c.setFont('MGBold', 14)
+    c.setFillColor(HexColor('#0d1f0d'))
+    c.drawCentredString(W - 85, banner_y + 20, '83x 향상')
+
+    # ── 문제 ① N+1 ──────────────────────────────────────────────
+    sec_y = banner_y - 28
+    half_w = (W - 80 - 16) / 2
+
+    def perf_card(cx, cy, title, accent_col, before_lines, after_lines, card_h=248):
+        card_rect(c, cx, cy - card_h, half_w, card_h)
+        left_accent_line(c, cx + 7, cy - card_h + 10, card_h - 20, color=accent_col)
+
+        c.setFont('MGBold', 10.5)
+        c.setFillColor(accent_col)
+        c.drawString(cx + 17, cy - 18, title)
+        c.setStrokeColor(BORDER)
+        c.setLineWidth(0.5)
+        c.line(cx + 17, cy - 26, cx + half_w - 10, cy - 26)
+
+        # BEFORE 블록
+        before_h = len(before_lines) * 11 + 22
+        bby = cy - 44
+        card_rect(c, cx + 17, bby - before_h, half_w - 28, before_h + 4,
+                  fill=HexColor('#200d0d'), stroke=HexColor('#f87171'), lw=0.7)
+        c.setFont('MGBold', 7.5)
+        c.setFillColor(HexColor('#f87171'))
+        c.drawString(cx + 24, bby - 10, 'BEFORE')
+        ly = bby - 22
+        for line in before_lines:
+            c.setFont('MG', 7.5)
+            c.setFillColor(TEXT_SEC)
+            c.drawString(cx + 24, ly, line)
+            ly -= 11
+
+        # AFTER 블록
+        after_h = len(after_lines) * 11 + 22
+        aby = bby - before_h - 12
+        card_rect(c, cx + 17, aby - after_h, half_w - 28, after_h + 4,
+                  fill=HexColor('#0d1f0d'), stroke=ACCENT_G, lw=0.7)
+        c.setFont('MGBold', 7.5)
+        c.setFillColor(ACCENT_G)
+        c.drawString(cx + 24, aby - 10, 'AFTER')
+        ly2 = aby - 22
+        for line in after_lines:
+            c.setFont('MG', 7.5)
+            c.setFillColor(TEXT_SEC)
+            c.drawString(cx + 24, ly2, line)
+            ly2 -= 11
+
+    perf_card(
+        40, sec_y,
+        '① N+1 쿼리 문제 해결',
+        HexColor('#f87171'),
+        before_lines=[
+            '목록 각 행마다 SUM() 서브쿼리 반복 실행',
+            '→ 데이터 100건 = SQL 101번 호출 (과부하)',
+            'SELECT *, (SELECT SUM(...)',
+            '  FROM items WHERE order_id = o.id)',
+            'FROM orders o  -- 행마다 재실행!',
+        ],
+        after_lines=[
+            '파생 테이블로 SUM 미리 집계 후 1회 JOIN',
+            '→ 데이터 100건도 SQL 1번으로 처리',
+            'SELECT o.*, s.total FROM orders o',
+            'LEFT JOIN (SELECT order_id,',
+            '  SUM(qty) total FROM items',
+            '  GROUP BY order_id) s ON o.id=s.order_id',
+        ],
+    )
+
+    perf_card(
+        40 + half_w + 16, sec_y,
+        '② JOIN 조건 · 인덱스 최적화',
+        CODE_BLUE,
+        before_lines=[
+            'LIKE 연산자로 customer_name 매칭',
+            '→ 인덱스 무효화, 풀 스캔 발생',
+            'JOIN suppliers s',
+            '  ON o.supplier_info',
+            '     LIKE CONCAT(\'%\',s.name,\'%\')',
+            '-- 전체 스캔으로 매우 느림',
+        ],
+        after_lines=[
+            'customer_name 컬럼 직접 참조로 변경',
+            '→ 인덱스 즉시 활용, 속도 대폭 향상',
+            'JOIN suppliers s',
+            '  ON o.customer_name = s.name',
+            '-- 인덱스 활용 → 즉시 탐색',
+            '-- 14.25s → 0.17s 달성',
+        ],
+    )
+
+    # ── 배운 점 ─────────────────────────────────────────────────
+    lesson_y = sec_y - 270
+    card_rect(c, 40, lesson_y - 50, W - 80, 55)
+    left_accent_line(c, 48, lesson_y - 42, 38, color=CODE_BLUE)
+    c.setFont('MGBold', 10)
+    c.setFillColor(CODE_BLUE)
+    c.drawString(58, lesson_y - 14, '배운 점')
+    c.setFont('MG', 9)
+    c.setFillColor(TEXT_PRI)
+    c.drawString(58, lesson_y - 28, (
+        '"기능 구현"에서 끝나지 않고 실제 사용 환경에서 병목을 직접 발견하고 쿼리 구조를 재설계하여 83배의 성능 향상을 달성했습니다.'
+    ))
+    c.setFont('MG', 9)
+    c.setFillColor(TEXT_SEC)
+    c.drawString(58, lesson_y - 42, 'N+1 문제와 인덱스 활용의 중요성을 실무 수준으로 체득한 경험입니다.')
+
+    draw_footer(c, 'Developer Portfolio', '개발환기좀해 ERP — Project 04', page_num)
+    c.showPage()
+
+
+# ══════════════════════════════════════════════════════════════
+# PROJECT 05 — FIRST 팀 쇼핑몰
+# ══════════════════════════════════════════════════════════════
+def page_first_cover_overview(c, page_num):
+    """PROJECT 05 커버 + 개요"""
+    full_bg(c)
+    c.setFillColor(HexColor('#051828'))
+    c.circle(W * 0.5, H * 0.55, 280, fill=1, stroke=0)
+
+    # PROJECT 05 레이블
+    c.setFont('MGBold', 9)
+    c.setFillColor(FIRST_ACCENT)
+    lbl = 'PROJECT 05'
+    lw_ = c.stringWidth(lbl, 'MGBold', 9)
+    c.setStrokeColor(FIRST_ACCENT)
+    c.setLineWidth(0.5)
+    c.line(W/2 - lw_/2 - 20, H*0.76 + 6, W/2 - lw_/2 - 5, H*0.76 + 6)
+    c.line(W/2 + lw_/2 + 5,  H*0.76 + 6, W/2 + lw_/2 + 20, H*0.76 + 6)
+    c.drawCentredString(W/2, H*0.76, lbl)
+
+    c.setFont('MGBold', 36)
+    c.setFillColor(TEXT_PRI)
+    c.drawCentredString(W/2, H*0.69, 'FIRST 팀 쇼핑몰')
+
+    c.setFont('MG', 12)
+    c.setFillColor(TEXT_SEC)
+    c.drawCentredString(W/2, H*0.645, 'React + Node.js · 4인 팀 프로젝트 · 3주')
+
+    meta_items = [('유형', '4인 팀 프로젝트'), ('기간', '25.12.02 – 12.18'), ('역할', '결제·관리자'), ('팀 저장소', 'kyeol1202/Team4-Project')]
+    meta_y = H * 0.59
+    bw_ = 118
+    total_mw = len(meta_items) * bw_ + (len(meta_items)-1) * 10
+    sx_ = W/2 - total_mw/2
+    for i_, (k_, v_) in enumerate(meta_items):
+        mx_ = sx_ + i_ * (bw_ + 10)
+        card_rect(c, mx_, meta_y, bw_, 38)
+        c.setFont('MG', 7.5)
+        c.setFillColor(TEXT_DARK)
+        c.drawString(mx_ + 10, meta_y + 26, k_)
+        c.setFont('MGBold', 8.5)
+        c.setFillColor(FIRST_ACCENT)
+        c.drawString(mx_ + 10, meta_y + 12, v_)
+
+    # 기술 스택
+    tags_ = ['React 18', 'Node.js', 'Express 5', 'MySQL2', 'MariaDB', 'OpenAI', 'Multer', 'React Router']
+    tx_ = W/2 - (sum(c.stringWidth(t,'MG',7.5)+16 for t in tags_) + (len(tags_)-1)*5) / 2
+    ty_ = meta_y - 30
+    for t_ in tags_:
+        tw_ = c.stringWidth(t_, 'MG', 7.5) + 16
+        c.setFillColor(CARD)
+        c.setStrokeColor(FIRST_ACCENT)
+        c.setLineWidth(0.5)
+        c.roundRect(tx_, ty_ - 2, tw_, 14, 3, fill=1, stroke=1)
+        c.setFont('MG', 7.5)
+        c.setFillColor(FIRST_ACCENT)
+        c.drawString(tx_ + 8, ty_ + 2, t_)
+        tx_ += tw_ + 5
+
+    # 주요 기능 카드 (2열)
+    feat_y = meta_y - 68
+    feats = [
+        (FIRST_ACCENT, '결제 시스템', '카드 결제 흐름 구현 (주문 생성 → 결제 처리 → 성공/실패 분기)'),
+        (HexColor('#34d399'), '관리자 페이지', '상품/주문/회원 CRUD, 관리자 로그인 JWT 인증'),
+        (HexColor('#f87171'), 'AI 챗봇', 'OpenAI API 연동 상품 추천 & Q&A 자동 응답'),
+        (HexColor('#fbbf24'), '위시리스트 · 장바구니', 'Context API 전역 상태, DB 연동 위시/장바구니'),
+        (HexColor('#a78bfa'), '교환 · 반품', '반품/환불 접수 폼, 마이페이지 주문 내역 연동'),
+        (HexColor('#94a3b8'), '검색 · 카테고리', '상품 검색, 카테고리별 필터링, 상품 상세'),
+    ]
+    fw = (W - 80 - 12) / 2
+    fh = 44
+    for idx_, (col_, ttl_, desc_) in enumerate(feats):
+        fx_ = 40 + (idx_ % 2) * (fw + 12)
+        fy_ = feat_y - (idx_ // 2) * (fh + 8) - fh
+        card_rect(c, fx_, fy_, fw, fh)
+        left_accent_line(c, fx_ + 7, fy_ + 6, fh - 12, color=col_, lw=2)
+        c.setFont('MGBold', 9)
+        c.setFillColor(col_)
+        c.drawString(fx_ + 16, fy_ + fh - 14, ttl_)
+        c.setFont('MG', 7.5)
+        c.setFillColor(TEXT_SEC)
+        c.drawString(fx_ + 16, fy_ + fh - 26, desc_[:50])
+        if len(desc_) > 50:
+            c.drawString(fx_ + 16, fy_ + fh - 36, desc_[50:])
+
+    draw_footer(c, 'Developer Portfolio', 'FIRST 팀 쇼핑몰 — Project 05', page_num)
+    c.showPage()
+
+
+def page_first_struggle(c, page_num):
+    """PROJECT 05 — 고난과 역경 (Git 기록)"""
+    full_bg(c)
+
+    badge(c, 40, H - 70, '16', color=FIRST_ACCENT)
+    c.setFont('MGBold', 22)
+    c.setFillColor(TEXT_PRI)
+    c.drawString(40, H - 100, '고난과 역경')
+    c.setFont('MG', 10)
+    c.setFillColor(FIRST_ACCENT)
+    c.drawString(40, H - 116, 'Git이 증명하는 개발 여정 — 실제 커밋 메시지 기록')
+
+    c.setStrokeColor(BORDER)
+    c.setLineWidth(0.5)
+    c.line(40, H - 124, W - 40, H - 124)
+
+    # 전체를 좌(타임라인) + 우(결론) 2열로 구성
+    # 왼쪽: git commit 타임라인 카드들
+    # 오른쪽: 해결 요약 + 배운 점
+
+    struggle_items = [
+        (RED_DOT,   'Dec 10',  '관리자용수정중인데모르겟서요엉엉',
+         '어드민 페이지 구조를 어떻게 설계해야 할지 막막했던 순간. 권한 분리, JWT 인증 경로, 라우팅 구조 전부 처음이었음.'),
+        (YEL_DOT,   'Dec 12',  '진짜진짜진짜',
+         '결제 로직이 계속 오류. 주문 생성 → 결제 연결 → DB 저장까지 흐름이 연결이 안 됨. 커밋 이름이 절박함을 표현.'),
+        (GRN_DOT,   'Dec 12',  '결제된다 무야호',
+         '드디어 결제 흐름 완성! /api/order/create 라우트와 프론트 Payment 컴포넌트가 맞물림. 팀 최고 명장면.'),
+        (YEL_DOT,   'Dec ~',   '장바구니 디자인 복구',
+         'develop 브랜치 머지 이후 cart-pay.css가 충돌로 깨짐. 308줄 삭제하고 재설계. 머지 충돌의 교훈.'),
+        (YEL_DOT,   'Dec 4',   'ip변경 (203 → 224)',
+         'DB_HOST가 컴퓨터마다 달라 .env를 계속 수정. 팀 공통 DB 서버 IP를 통일하는 과정.'),
+    ]
+
+    tl_x = 40
+    tl_w = W - 80
+    item_h = 78
+    item_gap = 10
+    start_y = H - 142
+
+    for dot_col, date_, commit_msg, explain in struggle_items:
+        cy_ = start_y - item_h
+        card_rect(c, tl_x, cy_, tl_w, item_h, fill=CARD, stroke=BORDER)
+
+        # 좌측 상태 점
+        c.setFillColor(dot_col)
+        c.circle(tl_x + 18, cy_ + item_h/2, 5, fill=1, stroke=0)
+
+        # 날짜
+        c.setFont('MG', 7.5)
+        c.setFillColor(TEXT_DARK)
+        c.drawString(tl_x + 30, cy_ + item_h - 14, date_)
+
+        # 커밋 메시지 (터미널 스타일)
+        terminal_header(c, tl_x + 80, cy_ + item_h - 12, 220)
+        card_rect(c, tl_x + 80, cy_ + item_h - 30, 220, 18, fill=CARD_DARK, stroke=BORDER, lw=0.5, radius=0)
+        c.setFont('MGBold', 8.5)
+        if dot_col == GRN_DOT:
+            c.setFillColor(ACCENT_G)
+        elif dot_col == YEL_DOT:
+            c.setFillColor(ACCENT_O)
+        else:
+            c.setFillColor(HexColor('#f87171'))
+        c.drawString(tl_x + 86, cy_ + item_h - 24, commit_msg)
+
+        # 설명
+        c.setFont('MG', 8)
+        c.setFillColor(TEXT_SEC)
+        for ii_, chunk_ in enumerate([explain[j:j+62] for j in range(0, min(len(explain), 186), 62)]):
+            c.drawString(tl_x + 80, cy_ + item_h - 48 - ii_ * 11, chunk_)
+
+        start_y = cy_ - item_gap
+
+    draw_footer(c, 'Developer Portfolio', 'FIRST 팀 쇼핑몰 — Project 05', page_num)
+    c.showPage()
+
+
+def page_first_review(c, page_num):
+    """PROJECT 05 — 해결 & 회고"""
+    full_bg(c)
+
+    badge(c, 40, H - 70, '17', color=FIRST_ACCENT)
+    c.setFont('MGBold', 22)
+    c.setFillColor(TEXT_PRI)
+    c.drawString(40, H - 100, '해결 & 회고')
+    c.setFont('MG', 10)
+    c.setFillColor(TEXT_SEC)
+    c.drawString(40, H - 116, 'FIRST 팀 쇼핑몰 — 협업 충돌 극복 & 성장 스토리')
+
+    # 성과 수치
+    metrics = [('결제', '완전 구현'), ('팀원', '4명 협업'), ('머지', '충돌 극복'), ('OpenAI', 'API 연동')]
+    m_y = H - 168
+    m_w = (W - 80 - 30) / 4
+    for i_, (val_, lbl_) in enumerate(metrics):
+        mx_ = 40 + i_ * (m_w + 10)
+        card_rect(c, mx_, m_y, m_w - 4, 46)
+        c.setFont('MGBold', 16)
+        c.setFillColor(FIRST_ACCENT)
+        c.drawCentredString(mx_ + (m_w-4)/2, m_y + 28, val_)
+        c.setFont('MG', 8)
+        c.setFillColor(TEXT_SEC)
+        c.drawCentredString(mx_ + (m_w-4)/2, m_y + 14, lbl_)
+
+    # 어떻게 해결했나 + 아쉬운 점
+    tw_ = (W - 80 - 16) / 2
+    th_ = 200
+
+    card_rect(c, 40, m_y - th_ - 20, tw_, th_)
+    left_accent_line(c, 48, m_y - th_ - 10, th_ - 20, color=FIRST_ACCENT)
+    c.setFont('MGBold', 11)
+    c.setFillColor(FIRST_ACCENT)
+    c.drawString(58, m_y - 38, '✦ 어떻게 극복했나')
+    fixes = [
+        '결제: POST /api/order/create 라우트 직접 설계, Payment 컴포넌트와 흐름 맞춤',
+        '관리자: JWT 미들웨어 분리 후 adminController로 책임 분산',
+        '머지 충돌: cart-pay.css 전량 삭제 후 Payment.css로 통합 재설계',
+        'IP 이슈: 팀 공용 .env 파일 규칙 설정 (DB_HOST 통일)',
+        '브랜치 전략: front-dev / back-dev 분리 운영 → develop 머지 프로세스',
+    ]
+    fy_ = m_y - 56
+    for f_ in fixes:
+        used_ = bullet_item(c, 58, fy_, f_, max_w=tw_ - 30, bullet_color=FIRST_ACCENT, size=8.5)
+        fy_ -= used_ + 3
+
+    card_rect(c, 40 + tw_ + 16, m_y - th_ - 20, tw_, th_)
+    left_accent_line(c, 40 + tw_ + 24, m_y - th_ - 10, th_ - 20, color=ACCENT_O)
+    c.setFont('MGBold', 11)
+    c.setFillColor(ACCENT_O)
+    c.drawString(40 + tw_ + 34, m_y - 38, '△ 아쉬운 점 / 배운 점')
+    bads_ = [
+        '초반 브랜치 전략 없이 시작 → 머지 충돌 빈발',
+        '공통 컴포넌트 설계 없이 각자 스타일 → CSS 충돌',
+        '결제 흐름 설계 문서화 없이 코딩 → 시행착오 반복',
+        '다음엔 API 명세서 먼저 작성 후 개발 시작 목표',
+    ]
+    by_ = m_y - 56
+    for b_ in bads_:
+        used_ = bullet_item(c, 40 + tw_ + 34, by_, b_, max_w=tw_ - 30, bullet_color=ACCENT_O, size=8.5)
+        by_ -= used_ + 3
+
+    # 성장 스토리
+    ry_ = m_y - th_ - 50
+    rh_ = 155
+    card_rect(c, 40, ry_ - rh_, W - 80, rh_)
+    left_accent_line(c, 48, ry_ - rh_ + 10, rh_ - 20, color=FIRST_ACCENT)
+    c.setFont('MGBold', 11)
+    c.setFillColor(FIRST_ACCENT)
+    c.drawString(58, ry_ - 20, '💬 회고 — FIRST 팀 프로젝트')
+    c.setStrokeColor(BORDER)
+    c.setLineWidth(0.5)
+    c.line(58, ry_ - 28, W - 50, ry_ - 28)
+    story_ = [
+        '"결제된다 무야호" 라는 커밋 메시지가 이 프로젝트의 모든 것을 담고 있습니다. 막혀 있던 결제 흐름이',
+        '뚫린 순간의 기쁨은, 그 이전까지의 좌절 — "진짜진짜진짜", "관리자용수정중인데모르겟서요엉엉" — 이',
+        '있었기 때문입니다. 처음으로 팀 협업에서 머지 충돌을 경험하고, 브랜치 전략의 필요성을 몸으로 배웠습니다.',
+        '혼자 해결할 수 없던 문제들을 팀원과 함께 풀어가며, 소통과 역할 분담이 기술만큼 중요하다는 것을 깨달았습니다.',
+    ]
+    sy_ = ry_ - 44
+    for line_ in story_:
+        c.setFont('MG', 9)
+        c.setFillColor(TEXT_PRI)
+        c.drawString(58, sy_, line_)
+        sy_ -= 14
+
+    draw_footer(c, 'Developer Portfolio', 'FIRST 팀 쇼핑몰 — Project 05', page_num)
+    c.showPage()
+
+
+# ══════════════════════════════════════════════════════════════
+# PROJECT 06 — 계절 솔로 쇼핑몰
+# ══════════════════════════════════════════════════════════════
+def page_solo_cover_overview(c, page_num):
+    """PROJECT 06 커버 + 개요"""
+    full_bg(c)
+    c.setFillColor(HexColor('#1c0d00'))
+    c.circle(W * 0.5, H * 0.55, 280, fill=1, stroke=0)
+
+    c.setFont('MGBold', 9)
+    c.setFillColor(SOLO_ACCENT)
+    lbl = 'PROJECT 06'
+    lw_ = c.stringWidth(lbl, 'MGBold', 9)
+    c.setStrokeColor(SOLO_ACCENT)
+    c.setLineWidth(0.5)
+    c.line(W/2 - lw_/2 - 20, H*0.76 + 6, W/2 - lw_/2 - 5, H*0.76 + 6)
+    c.line(W/2 + lw_/2 + 5,  H*0.76 + 6, W/2 + lw_/2 + 20, H*0.76 + 6)
+    c.drawCentredString(W/2, H*0.76, lbl)
+
+    c.setFont('MGBold', 42)
+    c.setFillColor(TEXT_PRI)
+    c.drawCentredString(W/2, H*0.69, '계절')
+
+    c.setFont('MG', 13)
+    c.setFillColor(TEXT_SEC)
+    c.drawCentredString(W/2, H*0.645, '패션 쇼핑몰 · React + Node.js + Socket.io · 1인 솔로 10일')
+
+    meta_items = [('유형', '1인 솔로'), ('기간', '26.01.15 – 01.24'), ('커밋', '21 commits'), ('특이사항', 'Socket.io · Nodemailer')]
+    meta_y = H * 0.59
+    bw_ = 118
+    total_mw = len(meta_items) * bw_ + (len(meta_items)-1) * 10
+    sx_ = W/2 - total_mw/2
+    for i_, (k_, v_) in enumerate(meta_items):
+        mx_ = sx_ + i_ * (bw_ + 10)
+        card_rect(c, mx_, meta_y, bw_, 38)
+        c.setFont('MG', 7.5)
+        c.setFillColor(TEXT_DARK)
+        c.drawString(mx_ + 10, meta_y + 26, k_)
+        c.setFont('MGBold', 8.5)
+        c.setFillColor(SOLO_ACCENT)
+        c.drawString(mx_ + 10, meta_y + 12, v_)
+
+    tags_ = ['React 18', 'Vite', 'Node.js', 'Express 5', 'MySQL', 'JWT', 'Socket.io', 'Nodemailer', 'Multer', 'Chart.js', 'bcryptjs']
+    tx_ = W/2 - (sum(c.stringWidth(t,'MG',7)+16 for t in tags_) + (len(tags_)-1)*4) / 2
+    ty_ = meta_y - 30
+    for t_ in tags_:
+        tw__ = c.stringWidth(t_, 'MG', 7) + 16
+        c.setFillColor(CARD)
+        c.setStrokeColor(SOLO_ACCENT)
+        c.setLineWidth(0.5)
+        c.roundRect(tx_, ty_ - 2, tw__, 14, 3, fill=1, stroke=1)
+        c.setFont('MG', 7)
+        c.setFillColor(SOLO_ACCENT)
+        c.drawString(tx_ + 8, ty_ + 2, t_)
+        tx_ += tw__ + 4
+
+    # 주요 기능
+    feats = [
+        (SOLO_ACCENT,          '실시간 채팅',          'Socket.io 1:1 고객 상담 · 관리자 채팅 관리 · 읽음 처리'),
+        (HexColor('#34d399'),  '등급 시스템',          '구매액 기반 자동 산정 (일반/브론즈/실버/골드/VIP)'),
+        (HexColor('#a78bfa'),  '비밀번호 찾기',         'Nodemailer Gmail SMTP 이메일 인증 링크 방식'),
+        (HexColor('#f87171'),  '관리자 대시보드',        'Chart.js 매출 분석 · 월별/시간대별/요일별 통계'),
+        (HexColor('#fbbf24'),  '주문 · 재고',           'DB 트랜잭션으로 주문 취소 시 재고 자동 복구'),
+        (HexColor('#60a5fa'),  '장바구니',              'Context API 전역 상태 · 수량 조절 · 실시간 금액 계산'),
+    ]
+    fw = (W - 80 - 12) / 2
+    fh = 44
+    feat_y = meta_y - 68
+    for idx_, (col_, ttl_, desc_) in enumerate(feats):
+        fx_ = 40 + (idx_ % 2) * (fw + 12)
+        fy_ = feat_y - (idx_ // 2) * (fh + 8) - fh
+        card_rect(c, fx_, fy_, fw, fh)
+        left_accent_line(c, fx_ + 7, fy_ + 6, fh - 12, color=col_, lw=2)
+        c.setFont('MGBold', 9)
+        c.setFillColor(col_)
+        c.drawString(fx_ + 16, fy_ + fh - 14, ttl_)
+        c.setFont('MG', 7.5)
+        c.setFillColor(TEXT_SEC)
+        c.drawString(fx_ + 16, fy_ + fh - 26, desc_[:50])
+        if len(desc_) > 50:
+            c.drawString(fx_ + 16, fy_ + fh - 36, desc_[50:])
+
+    draw_footer(c, 'Developer Portfolio', '계절 솔로 쇼핑몰 — Project 06', page_num)
+    c.showPage()
+
+
+def page_solo_struggle(c, page_num):
+    """PROJECT 06 — 고난과 역경 (10일 여정)"""
+    full_bg(c)
+
+    badge(c, 40, H - 70, '19', color=SOLO_ACCENT)
+    c.setFont('MGBold', 22)
+    c.setFillColor(TEXT_PRI)
+    c.drawString(40, H - 100, '고난과 역경')
+    c.setFont('MG', 10)
+    c.setFillColor(SOLO_ACCENT)
+    c.drawString(40, H - 116, '10일간의 솔로 개발 기록 — 실제 커밋이 증명하는 여정')
+
+    c.setStrokeColor(BORDER)
+    c.setLineWidth(0.5)
+    c.line(40, H - 124, W - 40, H - 124)
+
+    # Day 진행 바 (1일차~10일차 시각화)
+    bar_y = H - 152
+    bar_total_w = W - 80
+    day_w = bar_total_w / 10
+    days_info = [
+        ('1일', CARD, TEXT_DARK),
+        ('2일', CARD, TEXT_DARK),
+        ('3일', HexColor('#3b1f0a'), ACCENT_O),   # 두 번 커밋
+        ('4일', CARD, TEXT_DARK),
+        ('5일', CARD, TEXT_DARK),
+        ('6일', CARD, TEXT_DARK),
+        ('7일', CARD, TEXT_DARK),
+        ('8일', CARD, TEXT_DARK),
+        ('9일', CARD, TEXT_DARK),
+        ('10일', HexColor('#0a2e1e'), ACCENT_G),   # 완성!
+    ]
+    for di, (dlbl, dbg, dtxt) in enumerate(days_info):
+        dx = 40 + di * day_w
+        c.setFillColor(dbg)
+        c.setStrokeColor(BORDER)
+        c.setLineWidth(0.5)
+        c.rect(dx, bar_y - 18, day_w - 2, 18, fill=1, stroke=1)
+        c.setFont('MG', 7.5)
+        c.setFillColor(dtxt)
+        c.drawCentredString(dx + (day_w-2)/2, bar_y - 11, dlbl)
+
+    c.setFont('MG', 7)
+    c.setFillColor(ACCENT_O)
+    c.drawString(40 + 2*day_w, bar_y - 29, '^ 3일차 두번 커밋')
+    c.setFillColor(ACCENT_G)
+    c.drawString(40 + 9*day_w - 5, bar_y - 29, '^ 완성!')
+
+    # 고난 카드들
+    struggle_items = [
+        (YEL_DOT,  '1일차',  '학교↔집 환경 불일치',
+         '"123", "12313" 커밋 — IP 불일치로 axios baseURL 계속 수정. 집과 학교 DB 서버가 달랐음.',
+         'baseURL: http://192.168.0.219:5000  →  http://192.168.0.225:5000'),
+        (RED_DOT,  '3일차',  '카테고리 + 채팅 동시 막힘',
+         '같은 날 커밋 2번 — "3일차 (카테고리 수정 및 채팅)" 이후 바로 다시 커밋. 한 번에 두 기능이 막힘.',
+         '380개 파일 한번에 스테이징 → 이후 단건 커밋 방식으로 전환'),
+        (YEL_DOT,  '2-3일차', '집에서 고친거 사이드바 고침',
+         '"집에서 고친거 사이드바 고침" — 학교에서 잘 되던 사이드바가 집 환경에서 깨짐. 머지 충돌.',
+         'ProductListPage.css 175줄 변경 + 382개 파일 재동기화 필요'),
+        (GRN_DOT,  '10일차', '비밀번호 찾기 + 스크롤 + IP 최종 해결',
+         '"10일차 비밀번호 찾기 구현, IP 수정(225), 채팅 스크롤 개선, vite host 설정" — 마지막 날 일괄 해결!',
+         'Nodemailer Gmail SMTP, Socket.io 스크롤 자동이동, vite.config host:true'),
+    ]
+
+    start_y = bar_y - 48
+    item_h = 78
+    item_gap = 8
+
+    for dot_col, date_, title_, explain_, detail_ in struggle_items:
+        cy_ = start_y - item_h
+        card_rect(c, 40, cy_, W - 80, item_h, fill=CARD, stroke=BORDER)
+
+        c.setFillColor(dot_col)
+        c.circle(58, cy_ + item_h/2, 5, fill=1, stroke=0)
+
+        c.setFont('MGBold', 8.5)
+        if dot_col == GRN_DOT:
+            c.setFillColor(ACCENT_G)
+        elif dot_col == YEL_DOT:
+            c.setFillColor(ACCENT_O)
+        else:
+            c.setFillColor(HexColor('#f87171'))
+        c.drawString(72, cy_ + item_h - 14, f'[{date_}] {title_}')
+
+        c.setFont('MG', 8)
+        c.setFillColor(TEXT_SEC)
+        c.drawString(72, cy_ + item_h - 28, explain_[:68])
+        if len(explain_) > 68:
+            c.drawString(72, cy_ + item_h - 40, explain_[68:])
+
+        # detail 코드 스타일
+        c.setFillColor(CARD_DARK)
+        c.setStrokeColor(BORDER)
+        c.setLineWidth(0.4)
+        c.roundRect(72, cy_ + 8, W - 120, 16, 2, fill=1, stroke=1)
+        c.setFont('MG', 7.5)
+        c.setFillColor(CODE_BLUE)
+        c.drawString(78, cy_ + 13, detail_)
+
+        start_y = cy_ - item_gap
+
+    draw_footer(c, 'Developer Portfolio', '계절 솔로 쇼핑몰 — Project 06', page_num)
+    c.showPage()
+
+
+def page_solo_review(c, page_num):
+    """PROJECT 06 — 결과 & 회고"""
+    full_bg(c)
+
+    badge(c, 40, H - 70, '20', color=SOLO_ACCENT)
+    c.setFont('MGBold', 22)
+    c.setFillColor(TEXT_PRI)
+    c.drawString(40, H - 100, '결과 & 회고')
+    c.setFont('MG', 10)
+    c.setFillColor(TEXT_SEC)
+    c.drawString(40, H - 116, '계절 — 10일 만에 완성한 풀스택 쇼핑몰')
+
+    # 수치
+    metrics = [('10일', '완성'), ('21개', '커밋'), ('Socket.io', '실시간 채팅'), ('100%', '솔로 구현')]
+    m_y = H - 168
+    m_w = (W - 80 - 30) / 4
+    for i_, (val_, lbl_) in enumerate(metrics):
+        mx_ = 40 + i_ * (m_w + 10)
+        card_rect(c, mx_, m_y, m_w - 4, 46)
+        c.setFont('MGBold', 16)
+        c.setFillColor(SOLO_ACCENT)
+        c.drawCentredString(mx_ + (m_w-4)/2, m_y + 28, val_)
+        c.setFont('MG', 8)
+        c.setFillColor(TEXT_SEC)
+        c.drawCentredString(mx_ + (m_w-4)/2, m_y + 14, lbl_)
+
+    tw_ = (W - 80 - 16) / 2
+    th_ = 200
+
+    # 잘된 점
+    card_rect(c, 40, m_y - th_ - 20, tw_, th_)
+    left_accent_line(c, 48, m_y - th_ - 10, th_ - 20, color=SOLO_ACCENT)
+    c.setFont('MGBold', 11)
+    c.setFillColor(SOLO_ACCENT)
+    c.drawString(58, m_y - 38, '✦ 잘된 점')
+    goods_ = [
+        '사용자·관리자 기능 전체를 1인으로 10일 완성',
+        'Socket.io 실시간 채팅 + 읽음 처리 구현',
+        'Nodemailer Gmail SMTP 비밀번호 찾기 구현',
+        'Chart.js 매출/상품/고객 분석 대시보드',
+        'DB 트랜잭션 주문 취소 → 재고 자동 복구',
+        '구매액 기반 자동 등급 산정 (5단계)',
+    ]
+    gy_ = m_y - 56
+    for g_ in goods_:
+        used_ = bullet_item(c, 58, gy_, g_, max_w=tw_ - 30, bullet_color=SOLO_ACCENT, size=8.5)
+        gy_ -= used_ + 3
+
+    # 아쉬운 점
+    card_rect(c, 40 + tw_ + 16, m_y - th_ - 20, tw_, th_)
+    left_accent_line(c, 40 + tw_ + 24, m_y - th_ - 10, th_ - 20, color=ACCENT_O)
+    c.setFont('MGBold', 11)
+    c.setFillColor(ACCENT_O)
+    c.drawString(40 + tw_ + 34, m_y - 38, '△ 아쉬운 점 / 성장 포인트')
+    bads_ = [
+        '초반 IP 환경 통일 없이 시작 → 반복 수정 낭비',
+        '3일차 대용량 커밋 → 이후 단건 커밋으로 개선',
+        '타입스크립트 미적용 → 다음 프로젝트 도입 목표',
+        '테스트 코드 없음 → Jest + RTL 도입 계획',
+        'CSS-in-JS 미사용 → 스타일 충돌 발생',
+    ]
+    by_ = m_y - 56
+    for b_ in bads_:
+        used_ = bullet_item(c, 40 + tw_ + 34, by_, b_, max_w=tw_ - 30, bullet_color=ACCENT_O, size=8.5)
+        by_ -= used_ + 3
+
+    # 성장 스토리
+    ry_ = m_y - th_ - 50
+    rh_ = 158
+    card_rect(c, 40, ry_ - rh_, W - 80, rh_)
+    left_accent_line(c, 48, ry_ - rh_ + 10, rh_ - 20, color=SOLO_ACCENT)
+    c.setFont('MGBold', 11)
+    c.setFillColor(SOLO_ACCENT)
+    c.drawString(58, ry_ - 20, '💬 회고 — 계절 솔로 프로젝트')
+    c.setStrokeColor(BORDER)
+    c.setLineWidth(0.5)
+    c.line(58, ry_ - 28, W - 50, ry_ - 28)
+    story_ = [
+        '"123", "집에서 고친거", "IP 수정" 같은 커밋들이 부끄럽게 보일 수도 있지만, 그것들이 바로 10일 동안',
+        '혼자서 벽에 부딪히고 해결해 나간 증거입니다. 매일 커밋이 쌓일 때마다 기능 하나씩 완성되어 갔고,',
+        '10일차 마지막 커밋 "비밀번호 찾기 구현, IP 수정(225), 채팅 스크롤 개선" 에서 모든 것이 완성되었습니다.',
+        '혼자서 프론트엔드부터 백엔드, DB, 실시간 채팅, 이메일 인증까지 전체를 구현하며 풀스택 역량의 토대를 쌓았습니다.',
+    ]
+    sy_ = ry_ - 44
+    for line_ in story_:
+        c.setFont('MG', 9)
+        c.setFillColor(TEXT_PRI)
+        c.drawString(58, sy_, line_)
+        sy_ -= 14
+
+    draw_footer(c, 'Developer Portfolio', '계절 솔로 쇼핑몰 — Project 06', page_num)
+    c.showPage()
+
+
+# ══════════════════════════════════════════════════════════════
 # 메인 실행
 # ══════════════════════════════════════════════════════════════
 def build_full_portfolio(out_path):
-    """커버 + 목차 + 기존 p3~10 + RPA 5p + ERP 4p = 19페이지"""
+    """커버 + 목차 + 기존 p3~10 + RPA 5p + ERP 5p + FIRST 3p + Solo 3p = 26페이지"""
     import fitz as _fitz, os
 
     tmp_front = out_path.replace('.pdf', '_front_tmp.pdf')
     tmp_rpa   = out_path.replace('.pdf', '_rpa_tmp.pdf')
     tmp_erp   = out_path.replace('.pdf', '_erp_tmp.pdf')
+    tmp_first = out_path.replace('.pdf', '_first_tmp.pdf')
+    tmp_solo  = out_path.replace('.pdf', '_solo_tmp.pdf')
 
     # ① 커버 + 목차
     c1 = canvas.Canvas(tmp_front, pagesize=A4)
@@ -1260,28 +1973,47 @@ def build_full_portfolio(out_path):
     page_role_detail(c2, 13); page_rpa_impl(c2, 14); page_result(c2, 15)
     c2.save()
 
-    # ③ ERP 파트 (p16~19)
+    # ③ ERP 파트 (p16~20)
     c3 = canvas.Canvas(tmp_erp, pagesize=A4)
-    page_erp_cover(c3, 16);    page_erp_overview(c3, 17)
-    page_erp_features(c3, 18); page_erp_review(c3, 19)
+    page_erp_cover(c3, 16);       page_erp_overview(c3, 17)
+    page_erp_features(c3, 18);    page_erp_performance(c3, 19)
+    page_erp_review(c3, 20)
     c3.save()
 
-    # ④ 합치기
+    # ④ FIRST 팀 쇼핑몰 (p21~23)
+    c4 = canvas.Canvas(tmp_first, pagesize=A4)
+    page_first_cover_overview(c4, 21)
+    page_first_struggle(c4, 22)
+    page_first_review(c4, 23)
+    c4.save()
+
+    # ⑤ Solo 계절 (p24~26)
+    c5 = canvas.Canvas(tmp_solo, pagesize=A4)
+    page_solo_cover_overview(c5, 24)
+    page_solo_struggle(c5, 25)
+    page_solo_review(c5, 26)
+    c5.save()
+
+    # ⑥ 합치기
     orig  = _fitz.open('C:/Users/3class_013/Desktop/포트폴리오 수정폴더/통합_포트폴리오.pdf')
     front = _fitz.open(tmp_front)
     rpa   = _fitz.open(tmp_rpa)
     erp   = _fitz.open(tmp_erp)
+    first = _fitz.open(tmp_first)
+    solo  = _fitz.open(tmp_solo)
 
     out = _fitz.open()
     out.insert_pdf(front)                        # p1~2
     out.insert_pdf(orig, from_page=2, to_page=9) # p3~10
     out.insert_pdf(rpa)                          # p11~15
-    out.insert_pdf(erp)                          # p16~19
+    out.insert_pdf(erp)                          # p16~20
+    out.insert_pdf(first)                        # p21~23
+    out.insert_pdf(solo)                         # p24~26
     page_count = len(out)
     out.save(out_path)
 
-    for f in [front, rpa, erp, orig, out]: f.close()
-    for t in [tmp_front, tmp_rpa, tmp_erp]: os.remove(t)
+    for f in [front, rpa, erp, first, solo, orig, out]: f.close()
+    for t in [tmp_front, tmp_rpa, tmp_erp, tmp_first, tmp_solo]: os.remove(t)
 
     print(f'Done: {page_count} pages -> {out_path}')
 
