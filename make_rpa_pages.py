@@ -849,96 +849,391 @@ def page_main_cover(c):
 
 
 # ══════════════════════════════════════════════════════════════
-# 업데이트 목차 (두 번째 페이지) — PROJECT 03 추가
+# 업데이트 목차 — PROJECT 03, 04 포함
 # ══════════════════════════════════════════════════════════════
-def page_toc(c):
-    """통합 포트폴리오 목차 — PROJECT 03 포함"""
-    full_bg(c)
+ERP_ACCENT = HexColor('#e05c8a')
 
-    # INDEX 배지 + 목차 타이틀
+def page_toc(c):
+    full_bg(c)
     badge(c, 40, H - 62, 'INDEX', color=ACCENT_G, font_size=8, pad_x=8, pad_h=16)
     c.setFont('MGBold', 24)
     c.setFillColor(TEXT_PRI)
     c.drawString(106, H - 65, '목차')
-
-    # 구분선
     c.setStrokeColor(BORDER)
     c.setLineWidth(0.5)
     c.line(40, H - 76, W - 40, H - 76)
 
-    def section_header(label, y):
-        """▌PROJECT 0X — 프로젝트명 헤더"""
+    def sec_hdr(label, y):
         c.setFillColor(ACCENT_V)
         c.rect(40, y - 1, 3, 13, fill=1, stroke=0)
         c.setFont('MGBold', 9)
         c.setFillColor(ACCENT_VL)
         c.drawString(50, y, label)
 
-    def toc_item(num, title, subtitle, page_n, y, accent_col=ACCENT_V):
-        """목차 항목 카드"""
-        card_rect(c, 40, y - 30, W - 80, 36)
-        # 번호 배지
-        badge(c, 50, y - 21, f'{num:02d}', color=accent_col,
-              font_size=8, pad_x=6, pad_h=14)
-        # 제목
-        c.setFont('MGBold', 10)
+    def item(num, title, subtitle, pg, y, col=ACCENT_V):
+        card_rect(c, 40, y - 28, W - 80, 34)
+        badge(c, 50, y - 20, f'{num:02d}', color=col, font_size=8, pad_x=6, pad_h=13)
+        c.setFont('MGBold', 9.5)
         c.setFillColor(TEXT_PRI)
-        c.drawString(86, y - 11, title)
-        # 서브타이틀
-        c.setFont('MG', 8)
+        c.drawString(86, y - 10, title)
+        c.setFont('MG', 7.5)
         c.setFillColor(TEXT_SEC)
-        c.drawString(86, y - 23, subtitle)
-        # 페이지 번호
-        c.setFont('MG', 9)
+        c.drawString(86, y - 21, subtitle)
+        c.setFont('MG', 8.5)
         c.setFillColor(TEXT_DARK)
-        c.drawRightString(W - 50, y - 16, f'{page_n:02d}')
+        c.drawRightString(W - 50, y - 15, f'{pg:02d}')
 
-    # ─ PROJECT 01
     y = H - 100
-    section_header('PROJECT 01 — AURA 향수 쇼핑몰', y)
-    y -= 20
-    toc_item(1, '프로젝트 개요', 'AuRa 소개, 기술 스택, 팀 구성', 3,  y)
-    y -= 46
-    toc_item(2, '주요 기여 — DB 설계 · 인증 · 장바구니 · 카테고리',
-             '담당 기능 상세, 코드 구현 방식', 4, y)
-    y -= 46
-    toc_item(3, '기술적 어필 포인트', '관심사 분리, 중복 방지 로직, 서버단 검증', 5, y)
-    y -= 56
+    sec_hdr('PROJECT 01 — AuRa 향수 쇼핑몰', y);  y -= 18
+    item(1, '프로젝트 개요', 'AuRa 소개, 기술 스택, 팀 구성', 3, y);  y -= 42
+    item(2, '주요 기여 — DB · 인증 · 장바구니 · 카테고리', '담당 기능 상세, 코드 구현 방식', 4, y);  y -= 42
+    item(3, '기술적 어필 포인트', '관심사 분리, 중복 방지 로직, 서버단 검증', 5, y);  y -= 50
 
-    # ─ PROJECT 02
-    section_header('PROJECT 02 — KISETSU 도매 패션 이커머스', y)
-    y -= 20
-    toc_item(4, '프로젝트 개요 · 아키텍처', '기획 배경, 시스템 구조, 기술 스택', 7,
-             y, accent_col=ACCENT_G)
-    y -= 46
-    toc_item(5, '주요 기능 구현',
-             'JWT 인증, 실시간 채팅, 전역 상태, 인기검색어', 9,
-             y, accent_col=ACCENT_G)
-    y -= 46
-    toc_item(6, '결과 · 회고', '구현 성과, 배운 점, 성장 스토리', 10,
-             y, accent_col=ACCENT_G)
-    y -= 56
+    sec_hdr('PROJECT 02 — KISETSU 도매 패션 이커머스', y);  y -= 18
+    item(4, '프로젝트 개요 · 아키텍처', '기획 배경, 시스템 구조, 기술 스택', 7, y, ACCENT_G);  y -= 42
+    item(5, '주요 기능 구현', 'JWT 인증, 실시간 채팅, Context API, 인기검색어', 9, y, ACCENT_G);  y -= 42
+    item(6, '결과 · 회고', '구현 성과, 배운 점, 성장 스토리', 10, y, ACCENT_G);  y -= 50
 
-    # ─ PROJECT 03 (신규)
-    section_header('PROJECT 03 — 재무제표 자동화 (Python + BrityRPA)', y)
-    y -= 20
-    toc_item(7, '프로젝트 개요',
-             '기획 배경, 시스템 아키텍처, 담당 역할', 12,
-             y, accent_col=ACCENT_O)
-    y -= 46
-    toc_item(8, '담당 역할 — RPA 자동화 파이프라인',
-             '아키텍처 설계, RPA 구현, 데이터 검증 & 관리', 13,
-             y, accent_col=ACCENT_O)
-    y -= 46
-    toc_item(9, '핵심 기능 구현',
-             'Python 실행 자동화, Excel 차트, 메일 발송', 14,
-             y, accent_col=ACCENT_O)
-    y -= 46
-    toc_item(10, '결과 · 회고',
-             'RPA 성과, 잘된 점, 아쉬운 점, 자체 평가', 15,
-             y, accent_col=ACCENT_O)
+    sec_hdr('PROJECT 03 — 재무제표 자동화 (Python + BrityRPA)', y);  y -= 18
+    item(7, '프로젝트 개요', '기획 배경, 시스템 아키텍처, 담당 역할', 12, y, ACCENT_O);  y -= 42
+    item(8, '담당 역할 — RPA 자동화 파이프라인', '아키텍처 설계, RPA 구현, 데이터 검증', 13, y, ACCENT_O);  y -= 42
+    item(9, '핵심 기능 구현', 'Python 실행, Excel 차트 자동화, 메일 발송', 14, y, ACCENT_O);  y -= 42
+    item(10, '결과 · 회고', 'RPA 성과, 잘된 점, 아쉬운 점, 자체 평가', 15, y, ACCENT_O);  y -= 50
+
+    sec_hdr('PROJECT 04 — 개발환기좀해 ERP (Spring Boot + MyBatis)', y);  y -= 18
+    item(11, '프로젝트 개요 · 아키텍처', '기획 배경, 전체 모듈, 기술 스택', 16, y, ERP_ACCENT);  y -= 42
+    item(12, '핵심 기능 구현', 'OCR 거래명세서, BOM 자동발주, 재무 리포트', 17, y, ERP_ACCENT);  y -= 42
+    item(13, '기술적 어필 & 회고', 'Spring Security, 트랜잭션, 성과, 회고', 18, y, ERP_ACCENT)
 
     draw_footer(c, 'Developer Portfolio', '', 2)
+    c.showPage()
+
+
+# ══════════════════════════════════════════════════════════════
+# PROJECT 04 — ERP 커버
+# ══════════════════════════════════════════════════════════════
+def page_erp_cover(c, page_num):
+    full_bg(c)
+    c.setFillColor(HexColor('#200d18'))
+    c.circle(W * 0.5, H * 0.55, 280, fill=1, stroke=0)
+
+    c.setFont('MGBold', 9)
+    c.setFillColor(ERP_ACCENT)
+    lbl = 'PROJECT 04'
+    lw2 = c.stringWidth(lbl, 'MGBold', 9)
+    c.setStrokeColor(ERP_ACCENT)
+    c.setLineWidth(0.5)
+    c.line(W/2 - lw2/2 - 20, H*0.62 + 6, W/2 - lw2/2 - 5, H*0.62 + 6)
+    c.line(W/2 + lw2/2 + 5,  H*0.62 + 6, W/2 + lw2/2 + 20, H*0.62 + 6)
+    c.drawCentredString(W/2, H*0.62, lbl)
+
+    c.setFont('MGBold', 34)
+    c.setFillColor(TEXT_PRI)
+    c.drawCentredString(W/2, H*0.53, '개발환기좀해 ERP')
+
+    c.setFont('MG', 13)
+    c.setFillColor(TEXT_SEC)
+    c.drawCentredString(W/2, H*0.475, 'Spring Boot + MyBatis · 1인 솔로 풀스택')
+
+    meta_items = [
+        ('유형', '1인 솔로 프로젝트'),
+        ('기간', '26.03.25 – 04.01'),
+        ('규모', '모듈 15개+'),
+        ('특이사항', 'OCR · AI API 연동'),
+    ]
+    meta_y = H * 0.375
+    bw2 = 110
+    total_mw = len(meta_items) * bw2 + (len(meta_items)-1) * 10
+    sx = W/2 - total_mw/2
+    for i, (k, v) in enumerate(meta_items):
+        mx = sx + i * (bw2 + 10)
+        card_rect(c, mx, meta_y, bw2, 42)
+        c.setFont('MG', 7.5)
+        c.setFillColor(TEXT_DARK)
+        c.drawCentredString(mx + bw2/2, meta_y + 28, k)
+        c.setFont('MGBold', 9)
+        c.setFillColor(TEXT_PRI)
+        c.drawCentredString(mx + bw2/2, meta_y + 14, v)
+
+    erp_tags = ['Spring Boot 3.4', 'Java 17', 'MyBatis', 'MariaDB',
+                'Spring Security', 'JSP/JSTL', 'Swagger', 'Gemini OCR', 'Lombok']
+    tag_tw = sum(c.stringWidth(t, 'MG', 7) + 16 for t in erp_tags) + (len(erp_tags)-1)*4
+    tx2 = W/2 - tag_tw/2
+    ty2 = meta_y - 28
+    for t in erp_tags:
+        c.setFont('MG', 7)
+        tw3 = c.stringWidth(t, 'MG', 7) + 16
+        c.setFillColor(CARD)
+        c.setStrokeColor(ERP_ACCENT)
+        c.setLineWidth(0.5)
+        c.roundRect(tx2, ty2 - 2, tw3, 13, 3, fill=1, stroke=1)
+        c.setFillColor(TEXT_SEC)
+        c.drawString(tx2 + 8, ty2 + 2, t)
+        tx2 += tw3 + 4
+
+    draw_footer(c, 'Developer Portfolio', '개발환기좀해 ERP — Project 04', page_num)
+    c.showPage()
+
+
+# ══════════════════════════════════════════════════════════════
+# PROJECT 04 — ERP 개요 & 모듈
+# ══════════════════════════════════════════════════════════════
+def page_erp_overview(c, page_num):
+    full_bg(c)
+    badge(c, 40, H - 70, '11')
+    c.setFont('MGBold', 22)
+    c.setFillColor(TEXT_PRI)
+    c.drawString(40, H - 100, '프로젝트 개요 · 전체 모듈')
+    c.setFont('MG', 10)
+    c.setFillColor(TEXT_SEC)
+    c.drawString(40, H - 116, '개발환기좀해 ERP — 제조업 기반 통합 자원 관리 시스템 (1인 풀스택)')
+
+    # 수치 박스
+    stats = [('15개+', '컨트롤러/모듈'), ('20개+', 'REST API'), ('1인', '솔로 개발'), ('5주', '개발 기간')]
+    stat_y = H - 170
+    sw2 = (W - 80 - 30) / 4
+    for i, (val, lbl) in enumerate(stats):
+        sx2 = 40 + i * (sw2 + 10)
+        card_rect(c, sx2, stat_y, sw2 - 4, 46)
+        c.setFont('MGBold', 18)
+        c.setFillColor(ERP_ACCENT)
+        c.drawCentredString(sx2 + (sw2-4)/2, stat_y + 26, val)
+        c.setFont('MG', 8)
+        c.setFillColor(TEXT_SEC)
+        c.drawCentredString(sx2 + (sw2-4)/2, stat_y + 12, lbl)
+
+    # 모듈 그리드 (3열)
+    modules = [
+        ('인증 · 보안',    ERP_ACCENT, ['Spring Security 역할 기반 접근제어', 'BCrypt 패스워드 해싱', 'ADMIN / USER 권한 분리']),
+        ('대시보드',       CODE_BLUE,  ['실시간 KPI (제품수, 직원수, 매출)', '재고부족 알림, 월별 작업지시 통계', '최근 주문 · 저재고 품목 리스트']),
+        ('인사 · 근태',    ACCENT_G,   ['직원 CRUD + 사진 업로드', '출퇴근 체크인/아웃 API', '연차/병가 등록 · 잔여일수 차감']),
+        ('생산 관리',      CODE_ORG,   ['BOM(자재명세서) 관리', '작업지시서 생성 · 상태 관리', 'BOM 기반 재고 부족 시 자동 발주']),
+        ('재고 · 창고',    CODE_GREEN, ['재고 CRUD, 입출고 트랜잭션', '창고별 재고 현황 관리', '저재고 기준치 설정 (시스템 설정)']),
+        ('구매 · 영업',    ACCENT_VL,  ['발주서 워크플로우 (대기→승인→완료)', '판매 · 배송 관리', '거래처(공급업체) 관리']),
+        ('거래명세서',     HexColor('#f87171'), ['OCR (Gemini/Groq AI) 자동 인식', '이미지 업로드 → DB 자동 등록', '인쇄 기능 (거래명세서 출력)']),
+        ('재무 분석',      HexColor('#34d399'), ['손익계산서 자동 계산 (월별/연별)', '영업이익률 · 매출총이익 산출', 'Python 연동 Excel 리포트 내보내기']),
+        ('관리자',         TEXT_SEC,   ['사용자 계정 관리 (ADMIN)', '저재고 기준치 시스템 설정', 'Swagger UI API 문서 자동화']),
+    ]
+    mw = (W - 80 - 20) / 3
+    mh = 82
+    start_y = stat_y - 20
+    for i, (title, col, items) in enumerate(modules):
+        row, col_idx = divmod(i, 3)
+        mx = 40 + col_idx * (mw + 10)
+        my = start_y - row * (mh + 8) - mh
+        card_rect(c, mx, my, mw, mh)
+        left_accent_line(c, mx + 7, my + 8, mh - 16, color=col)
+        c.setFont('MGBold', 9)
+        c.setFillColor(col)
+        c.drawString(mx + 16, my + mh - 16, title)
+        iy = my + mh - 30
+        for it in items:
+            c.setFont('MG', 7.5)
+            c.setFillColor(TEXT_SEC)
+            c.drawString(mx + 16, iy, it)
+            iy -= 11
+
+    draw_footer(c, 'Developer Portfolio', '개발환기좀해 ERP — Project 04', page_num)
+    c.showPage()
+
+
+# ══════════════════════════════════════════════════════════════
+# PROJECT 04 — 핵심 기능 구현
+# ══════════════════════════════════════════════════════════════
+def page_erp_features(c, page_num):
+    full_bg(c)
+    badge(c, 40, H - 70, '12')
+    c.setFont('MGBold', 22)
+    c.setFillColor(TEXT_PRI)
+    c.drawString(40, H - 100, '핵심 기능 구현')
+    c.setFont('MG', 10)
+    c.setFillColor(TEXT_SEC)
+    c.drawString(40, H - 116, 'OCR 자동 인식 · BOM 자동발주 · 재무 리포트 · Spring Security')
+
+    cells = [
+        {
+            'title': 'OCR 거래명세서 자동 인식',
+            'file': 'OcrController.java',
+            'color': HexColor('#f87171'),
+            'desc': 'Gemini/Groq AI API 연동. 이미지 업로드 → Python OCR 실행 → JSON 파싱 → DB 자동 저장까지 완전 자동화.',
+            'code': [
+                ('// 1. 이미지 → Python OCR 실행', TEXT_DARK),
+                ('ProcessBuilder pb = new ProcessBuilder(', CODE_BLUE),
+                ('  pythonCmd, mainPy, "--erp-mode", file);', CODE_BLUE),
+                ('// 2. JSON 파싱 → TransactionStatement', TEXT_DARK),
+                ('stmt.setIssueDate(LocalDate.parse(...));', CODE_GREEN),
+                ('statementService.insert(stmt, items);', CODE_ORG),
+            ],
+        },
+        {
+            'title': 'BOM 기반 자동 부품 발주',
+            'file': 'WorkOrderService.java',
+            'color': CODE_ORG,
+            'desc': '작업지시 시 BOM 조회 → 재고 부족 부품 자동 감지 → 발주서 자동 생성. 부품 원가 변경 시 완제품 원가 BOM 기반 자동 재계산.',
+            'code': [
+                ('// 재고 부족 부품 자동 발주', TEXT_DARK),
+                ('List<BomItem> shortages =', CODE_BLUE),
+                ('  bomService.checkShortages(workOrderId);', CODE_BLUE),
+                ('for (BomItem item : shortages) {', CODE_PUR),
+                ('  purchaseOrderService.autoCreate(item);', CODE_GREEN),
+                ('}  // 발주서 자동 생성', TEXT_DARK),
+            ],
+        },
+        {
+            'title': '재무 분석 · Python Excel 리포트',
+            'file': 'FinancialController.java',
+            'color': HexColor('#34d399'),
+            'desc': '매출/비용 데이터 기반 손익계산서 자동 산출. Python 스크립트 연동으로 xlsx 리포트 생성 및 다운로드.',
+            'code': [
+                ('// 영업이익률 자동 계산', TEXT_DARK),
+                ('BigDecimal opMargin = opProfit', CODE_BLUE),
+                ('  .divide(revenue, 4, HALF_UP)', CODE_BLUE),
+                ('  .multiply(BigDecimal.valueOf(100));', CODE_BLUE),
+                ('// Python → xlsx 리포트 반환', TEXT_DARK),
+                ('byte[] xlsx = runPythonClean(csvBytes);', CODE_GREEN),
+            ],
+        },
+        {
+            'title': 'Spring Security 역할 기반 인증',
+            'file': 'SecurityConfig.java',
+            'color': ACCENT_VL,
+            'desc': 'BCrypt 해싱, 폼 로그인, ADMIN/USER 역할 분리. /admin/** 경로는 ADMIN만 접근. JSP Forward/Include 요청 허용 처리.',
+            'code': [
+                ('// 역할 기반 접근 제어', TEXT_DARK),
+                ('.requestMatchers("/admin/**")', CODE_PUR),
+                ('  .hasRole("ADMIN")', CODE_ORG),
+                ('.anyRequest().authenticated()', CODE_GREEN),
+                ('// BCrypt 패스워드 인코더', TEXT_DARK),
+                ('return new BCryptPasswordEncoder();', CODE_BLUE),
+            ],
+        },
+    ]
+    cw = (W - 80 - 16) / 2
+    ch = 172
+    positions = [
+        (40, H - 143), (40 + cw + 16, H - 143),
+        (40, H - 143 - ch - 14), (40 + cw + 16, H - 143 - ch - 14),
+    ]
+    for cell, (cx2, cy_top) in zip(cells, positions):
+        cy2 = cy_top - ch
+        card_rect(c, cx2, cy2, cw, ch)
+        left_accent_line(c, cx2 + 7, cy2 + 8, ch - 16, color=cell['color'])
+        c.setFont('MGBold', 10)
+        c.setFillColor(cell['color'])
+        c.drawString(cx2 + 17, cy_top - 18, cell['title'])
+        c.setFont('MG', 7.5)
+        c.setFillColor(TEXT_DARK)
+        c.drawString(cx2 + 17, cy_top - 30, cell['file'])
+        desc_y = cy_top - 44
+        for chunk in [cell['desc'][i:i+40] for i in range(0, min(len(cell['desc']), 120), 40)]:
+            c.setFont('MG', 8)
+            c.setFillColor(TEXT_SEC)
+            c.drawString(cx2 + 17, desc_y, chunk)
+            desc_y -= 11
+        code_top = cy2 + 76
+        terminal_header(c, cx2 + 17, code_top, cw - 26)
+        card_rect(c, cx2 + 17, code_top - 68, cw - 26, 70, fill=CARD_DARK, stroke=BORDER, lw=0.5, radius=0)
+        cl2 = code_top - 10
+        for line, col2 in cell['code']:
+            c.setFont('MG', 7.5)
+            c.setFillColor(col2)
+            c.drawString(cx2 + 22, cl2, line)
+            cl2 -= 10
+
+    draw_footer(c, 'Developer Portfolio', '개발환기좀해 ERP — Project 04', page_num)
+    c.showPage()
+
+
+# ══════════════════════════════════════════════════════════════
+# PROJECT 04 — 기술적 어필 & 회고
+# ══════════════════════════════════════════════════════════════
+def page_erp_review(c, page_num):
+    full_bg(c)
+    badge(c, 40, H - 70, '13')
+    c.setFont('MGBold', 22)
+    c.setFillColor(TEXT_PRI)
+    c.drawString(40, H - 100, '기술적 어필 & 회고')
+    c.setFont('MG', 10)
+    c.setFillColor(TEXT_SEC)
+    c.drawString(40, H - 116, '개발환기좀해 ERP — 1인 풀스택 완성 성과')
+
+    # 수치
+    metrics = [('15개+', '모듈 구현'), ('100%', '1인 완성'), ('OCR', 'AI 연동'), ('트랜잭션', '원자성 보장')]
+    m_y = H - 168
+    m_w = (W - 80 - 30) / 4
+    for i, (val, lbl) in enumerate(metrics):
+        mx2 = 40 + i * (m_w + 10)
+        card_rect(c, mx2, m_y, m_w - 4, 46)
+        c.setFont('MGBold', 16)
+        c.setFillColor(ERP_ACCENT)
+        c.drawCentredString(mx2 + (m_w-4)/2, m_y + 26, val)
+        c.setFont('MG', 8)
+        c.setFillColor(TEXT_SEC)
+        c.drawCentredString(mx2 + (m_w-4)/2, m_y + 12, lbl)
+
+    # 기술 어필 + 아쉬운점 (2열)
+    tw4 = (W - 80 - 16) / 2
+    th4 = 190
+    card_rect(c, 40, m_y - th4 - 20, tw4, th4)
+    left_accent_line(c, 48, m_y - th4 - 10, th4 - 20, color=ERP_ACCENT)
+    c.setFont('MGBold', 11)
+    c.setFillColor(ERP_ACCENT)
+    c.drawString(58, m_y - 38, '✦ 기술적 어필 포인트')
+    pts = [
+        'OCR + AI API (Gemini/Groq) 연동 거래명세서 자동 등록',
+        'BOM 기반 재고 부족 자동 감지 → 발주서 즉시 생성',
+        '입고/출고/생산입고 @Transactional 원자성 처리',
+        'Spring Security 역할 기반 접근제어 + BCrypt',
+        'Python 연동 재무 Excel 리포트 (csv → xlsx 변환)',
+        '사이드바 아코디언 UI + 현재 메뉴 자동 펼침',
+    ]
+    py = m_y - 56
+    for p in pts:
+        used = bullet_item(c, 58, py, p, max_w=tw4 - 30, bullet_color=ERP_ACCENT, size=8.5)
+        py -= used + 3
+
+    card_rect(c, 40 + tw4 + 16, m_y - th4 - 20, tw4, th4)
+    left_accent_line(c, 40 + tw4 + 24, m_y - th4 - 10, th4 - 20, color=ACCENT_O)
+    c.setFont('MGBold', 11)
+    c.setFillColor(ACCENT_O)
+    c.drawString(40 + tw4 + 34, m_y - 38, '△ 아쉬운 점 / 개선 방향')
+    bads = [
+        'JSP + JSTL 한계 → 다음엔 React 프론트 분리 목표',
+        'OCR 예외 포맷(누락 · 오타) 처리 로직 보완 필요',
+        '테스트 코드 없음 → JUnit + MockMvc 도입 계획',
+        '실시간 알림(WebSocket) 추후 적용 예정',
+    ]
+    by2 = m_y - 56
+    for b in bads:
+        used = bullet_item(c, 40 + tw4 + 34, by2, b, max_w=tw4 - 30, bullet_color=ACCENT_O, size=8.5)
+        by2 -= used + 3
+
+    # 회고
+    ry = m_y - th4 - 50
+    rh = 158
+    card_rect(c, 40, ry - rh, W - 80, rh)
+    left_accent_line(c, 48, ry - rh + 10, rh - 20, color=ERP_ACCENT)
+    c.setFont('MGBold', 11)
+    c.setFillColor(ERP_ACCENT)
+    c.drawString(58, ry - 20, '💬 회고 — 개발환기좀해 ERP')
+    c.setStrokeColor(BORDER)
+    c.setLineWidth(0.5)
+    c.line(58, ry - 28, W - 50, ry - 28)
+    story = [
+        '제조업 ERP 전 모듈을 1인으로 처음부터 끝까지 구현하면서, 단순한 CRUD를 넘어 실제 업무 프로세스를 코드로',
+        '표현하는 경험을 했습니다. BOM 기반 자동 발주, OCR AI 연동, Python 재무 리포트 등 서로 다른 기술 스택을',
+        '하나의 시스템으로 통합하는 과정에서 Spring Boot의 계층 구조(Controller-Service-Mapper)와 트랜잭션 관리의',
+        '중요성을 몸소 익혔습니다. JSP의 한계를 느끼면서 React 분리의 필요성도 깨달았고, 다음 프로젝트에서는',
+        '프론트엔드를 완전히 분리한 REST API 기반 아키텍처를 목표로 합니다.',
+    ]
+    sy2 = ry - 44
+    for line in story:
+        c.setFont('MG', 9)
+        c.setFillColor(TEXT_PRI)
+        c.drawString(58, sy2, line)
+        sy2 -= 14
+
+    draw_footer(c, 'Developer Portfolio', '개발환기좀해 ERP — Project 04', page_num)
     c.showPage()
 
 
@@ -946,50 +1241,49 @@ def page_toc(c):
 # 메인 실행
 # ══════════════════════════════════════════════════════════════
 def build_full_portfolio(out_path):
-    """커버 + 목차 + 기존 본문(p3~p10) + RPA 파트(5페이지) 합치기"""
-    import fitz as _fitz
+    """커버 + 목차 + 기존 p3~10 + RPA 5p + ERP 4p = 19페이지"""
+    import fitz as _fitz, os
 
-    # ① 커버 + 목차 PDF 생성 (임시)
     tmp_front = out_path.replace('.pdf', '_front_tmp.pdf')
     tmp_rpa   = out_path.replace('.pdf', '_rpa_tmp.pdf')
+    tmp_erp   = out_path.replace('.pdf', '_erp_tmp.pdf')
 
+    # ① 커버 + 목차
     c1 = canvas.Canvas(tmp_front, pagesize=A4)
     page_main_cover(c1)
     page_toc(c1)
     c1.save()
 
-    # ② RPA 파트 5페이지 생성 (임시)
+    # ② RPA 파트 (p11~15)
     c2 = canvas.Canvas(tmp_rpa, pagesize=A4)
-    start_page = 11
-    page_cover(c2, start_page)
-    page_overview(c2, start_page + 1)
-    page_role_detail(c2, start_page + 2)
-    page_rpa_impl(c2, start_page + 3)
-    page_result(c2, start_page + 4)
+    page_cover(c2, 11);      page_overview(c2, 12)
+    page_role_detail(c2, 13); page_rpa_impl(c2, 14); page_result(c2, 15)
     c2.save()
 
-    # ③ 합치기: 새 커버/목차(2) + 기존 p3~p10(8) + RPA(5) = 15페이지
+    # ③ ERP 파트 (p16~19)
+    c3 = canvas.Canvas(tmp_erp, pagesize=A4)
+    page_erp_cover(c3, 16);    page_erp_overview(c3, 17)
+    page_erp_features(c3, 18); page_erp_review(c3, 19)
+    c3.save()
+
+    # ④ 합치기
     orig  = _fitz.open('C:/Users/3class_013/Desktop/포트폴리오 수정폴더/통합_포트폴리오.pdf')
     front = _fitz.open(tmp_front)
     rpa   = _fitz.open(tmp_rpa)
+    erp   = _fitz.open(tmp_erp)
 
     out = _fitz.open()
-    out.insert_pdf(front)                        # p1~2: 새 커버/목차
-    out.insert_pdf(orig, from_page=2, to_page=9) # p3~10: 기존 본문
-    out.insert_pdf(rpa)                          # p11~15: RPA 파트
+    out.insert_pdf(front)                        # p1~2
+    out.insert_pdf(orig, from_page=2, to_page=9) # p3~10
+    out.insert_pdf(rpa)                          # p11~15
+    out.insert_pdf(erp)                          # p16~19
     page_count = len(out)
     out.save(out_path)
 
-    # 임시 파일 삭제 (fitz 핸들 닫고 삭제)
-    import os
-    front.close()
-    rpa.close()
-    orig.close()
-    out.close()
-    os.remove(tmp_front)
-    os.remove(tmp_rpa)
+    for f in [front, rpa, erp, orig, out]: f.close()
+    for t in [tmp_front, tmp_rpa, tmp_erp]: os.remove(t)
 
-    print(f'Done: {page_count} pages saved to {out_path}')
+    print(f'Done: {page_count} pages -> {out_path}')
 
 
 if __name__ == '__main__':
